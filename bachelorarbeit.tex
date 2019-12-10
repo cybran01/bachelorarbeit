@@ -76,7 +76,7 @@
 %Die Gruppenkohomologie von freien Gruppen ist vollständig bekannt. Für den funktionalanalytischen Zwilling der Gruppenkohomologie, der beschränkten Kohomologie von Gruppen, gilt dies jedoch nicht. Bereits für die freie Gruppe von Rang 2 ist sie für $n\geq 4$ unbekannt. In dieser Arbeit werden zunächst die für die Definition der beschränkten Kohomologie von Gruppen notwendigen Begriffe eingeführt und anschließend, basierend auf Resultaten von \cite{matsumoto}, die theoretische Grundlage für eine experimentelle Überprüfung geschaffen. Der Abschluss der Arbeit ist eine beispielhafte Implementation einer solchen Überprüfung in der Programmiersprache C++.
 %\end{abstract}
 \begin{abstract}
-Die Gruppenkohomologie für eine freie Gruppe $F_n$ von Rang $n$ ist vollständig bekannt. So gilt beispielweise mit $\R$-Koeffizienten (und trivialer $G$-Aktion)
+Die Gruppenkohomologie für eine freie Gruppe $F_n$ von Rang $n$ ist vollständig bekannt. So gilt beispielweise mit $\R$-Koeffizienten (und trivialer Gruppenwirkung auf $\R$)
 \begin{equation*}
 H^q(F_n,\R)\cong
 \begin{cases} 
@@ -88,7 +88,7 @@ H^q(F_n,\R)\cong
 Für den funktionalanalytischen Zwilling der Gruppenkohomologie, der beschränkten Kohomologie von Gruppen $H_b^*(G,\R)$, gilt dies jedoch nicht. Obwohl sich diese in niedrigen Graden sehr einfach bestimmen lässt und sogar unabhängig von der Gruppe $G$ ist (siehe \cref{sec:BoundedCohomInLowDeg}), ist sie bereits für $F_2$ für $q\geq 4$ unbekannt. \par
 Für $q=2$ wurde von \autocite{mitsumatsu} und für $q=3$ wurde von \autocite{soma} gezeigt, dass $\dim_{\R} H_b^q(G,\R)=\infty$ gilt. Insbesondere demonstriert dies, dass beschränkte Kohomologie von Gruppen i.A. nichttrivial ist. Dies ist nicht offensichtlich, da sie nach \cite{gromov} für mittelbare Gruppen für $q>0$ verschwindet.\par
 In dieser Arbeit werden zuerst die grundlegenden Begriffe für das  Setting von (Ko)Homologie definiert. Gruppenkohomologie und beschränkte Kohomologie von Gruppen werden anschließend über die Bar-Auflösung konstruiert.\par
-Basierend auf einem Resultat von \cite{matsumoto} wird mithilfe der ,,Uniform Boundary Condition'' (UBC) eine äquivalente Charakterisierung der Trivialität von $H_b^4(F_2,\R)$ bewiesen, welche einen experimentellen Zugang ermöglicht.\par
+Basierend auf \cite[Theorem 2.8]{matsumoto} wird mithilfe der ,,Uniform Boundary Condition'' (UBC) eine äquivalente Charakterisierung der Trivialität von $H_b^4(F_2,\R)$ bewiesen, welche einen experimentellen Zugang ermöglicht.\par
 Zuletzt wird eine beispielhafte Implementation des Experiments in der Programmiersprache C++ gegeben und ein generierter Datensatz ausgewertet.
 \end{abstract}
 \tableofcontents
