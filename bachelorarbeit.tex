@@ -2,6 +2,13 @@
 
 \usepackage{polyglossia}
 \usepackage{csquotes}
+\usepackage{listings}
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}}
 \usepackage{abstract}
 \usepackage{tikz}
 \usetikzlibrary{matrix}
@@ -659,7 +666,7 @@ Nach \cref{satz:QUBCandComparisonMap} ist die Eigenschaft $3$-$\text{UBC}^{\Q}$ 
 \end{proof}
 \end{korollar}
 Da wir im Experiment nicht direkt Elemente $c\in\img\partial_4^{\Q}$ generieren können, müssen wir die Eigenschaft $3$-$\text{UBC}^{\Q}$ für Elemente $x\in C_4^{\Q}(F_2)$ umformulieren. 
-\begin{lemma}
+\begin{lemma}\label{lem:AltQUBC}
 Die Eigenschaft $3$-$\text{UBC}^{\Q}$ ist äquivalent zu folgender Eigenschaft:
 Es existiert ein $K>0$, sodass für alle $x\in C_4^{\Q}(F_2)$ gilt, dass 
 \begin{equation*}
@@ -669,21 +676,47 @@ erfüllt ist.
 \begin{proof}
 Wir zeigen zuerst, dass die gewünschte Eigenschaft aus $3$-$\text{UBC}^{\Q}$ folgt.\par
 Sei $x\in C_4^{\Q}(F_2)$. Dann existiert nach $3$-$\text{UBC}^{\Q}$ ein $z\in C_4^{\Q}(F_2)$ mit $\partial_4^{\Q}(z)=\partial_4^{\Q}(x)$ und $\|z\|_1\leq K\|\partial_4^{\Q}(x)\|_1$. Offenbar ist $c:=z-x\in\ker\partial_4^{\Q}$ und somit $\|x+c\|_1\leq K\|\partial_4^{\Q}(x)\|_1$, womit insbesondere die gewünschte Eigenschaft erfüllt ist.\par
-Sei nun $\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq K\|\partial_4^{\Q}(x)\|_1$ für alle $x\in C_4^{\Q}(F_2)$ erfüllt und sei $a\in\img\partial_4^{\Q}$. Dann existiert ein $x\in C_4^{\Q}(F_2)$ mit $\partial_4^{\Q}(x)=a$.
+Für die Umkehrung sei nun $\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq K\|\partial_4^{\Q}(x)\|_1$ für alle $x\in C_4^{\Q}(F_2)$ erfüllt und sei $a\in\img\partial_4^{\Q}$. Dann existiert ein $x\in C_4^{\Q}(F_2)$ mit $\partial_4^{\Q}(x)=a$.
 Nach Voraussetzung gilt dann $\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq K\|a\|_1$. Insbesondere existiert dann ein $c\in\ker\partial_4^{\Q}$ mit $\|x+c\|_1\leq (K+1)\|a\|_1$. Da $\partial_4^{\Q}(x+c)=a$ gilt, folgt $3$-$\text{UBC}^{\Q}$. 
 \end{proof}
 \end{lemma}
-Dies ermöglicht folgende Strategie: 
+\begin{bemerkung}\label{bem:strategy}
+\cref{lem:AltQUBC} ermöglicht folgende Strategie: 
 \begin{itemize}
 \item Einen möglichst großen Datensatz bestehend aus Tripeln $\biggl(x,\partial_4^{\Q}(x),\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}\biggr)$ generieren
-\item In dem generierten Datensatz bei Kollisionen von $\partial_4^{\Q}(x)$ die Werte $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ vergleichen
-\item Falls wir Elemente $x\in C_4^{\Q}(F_2)$ mit außergewöhnlich großen Quotienten $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ finden (die nicht durch Korrektur mit Elementen aus $\ker\partial_4^{\Q}$ im Zähler verkleinert werden können), ein Bildungsgesetz für eine Folge finden, die die Existenz einer Schranke $K$ widerlegt \par oder \par eine Gesetzmäßigkeit beobachten, welche zum Beweis der Existenz einer solchen Schranke benutzt werden kann.
+\item In dem generierten Datensatz die Werte $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ vergleichen
+\item Falls wir Elemente $x\in C_4^{\Q}(F_2)$ mit außergewöhnlich großen Quotienten $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ finden (für welche es keine $c\in \ker\partial_4^{\Q}$ gibt, sodass $\frac{\|x+c\|_1}{\|\partial_4^{\Q}(x)\|_1}<\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ gilt, siehe \cref{lem:AltQUBC}), ein Bildungsgesetz für eine Folge $\bigl(x_i\in C_4^{\Q}(F_2)\bigr)_{i\in\N}$ finden, die die Existenz einer Schranke $K$ aus \cref{lem:AltQUBC} widerlegt \par oder \par eine Gesetzmäßigkeit beobachten, welche zum Beweis der Existenz einer Schranke $K$ aus \cref{lem:AltQUBC} benutzt werden kann.
 \end{itemize}
-\chapter{Auswertung des Experiments}
-Eine beispielhafte Implementation des Experiments in der Programmiersprache C++ befindet sich (zusammen mit dem in diesem Kapitel ausgewerteten Datensatz) auf der beiliegenden CD sowie auf  GitHub unter dem Link %TODO Link einfügen
+\end{bemerkung}
+\section{Implementation des Experiments}
+Eine beispielhafte Implementation des Experiments in der Programmiersprache C++ befindet sich (zusammen mit dem im nächsten Kapitel ausgewerteten Datensatz) auf der beiliegenden CD sowie auf GitHub unter dem Link \url{https://github.com/cybran01/ubc-free-group}.
 \par
 In diesem Beispiel wurden, um die Anzahl an Kollisionen zu erhöhen, nur $x\in C_4^{\Q}(F_2)$ mit ganzzahligen Koeffizienten generiert. Dieser Schritt ist auch dadurch gerechtfertigt, dass für jedes Element $x=\sum\limits_{i=1}^na_iz_i\in C_4^{\Q}(F_2)$ mit $a_i=\frac{p_i}{q_i}$ (d.h. $x$ ist in $\Q$-Basisdarstellung) $y:=\text{kgV}(q_1,\ldots,q_n)x$ ganzzahlige Koeffizienten besitzt und $\frac{\|y\|_1}{\|\partial_4^{\Q}(y)\|_1}=\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ erfüllt, d.h. für jedes Element $x\in C_4^{\Q}(F_2)$ ein $y\in C_4(F_2)$ existiert, welches denselben Wert für den Quotienten liefert.\par 
 Um Reproduzierbarbeit zu gewährleisten, wurde der Datensatz mit den im Quelltext angegebenen ,,Default''-Parametern generiert.
+\subsection*{Funktionsweise der Implementation}
+Die Implementation besteht aus 4 Klassen, die die folgenden Funktionalitäten übernehmen:
+\begin{itemize}
+\item WORD\par
+Diese Klasse implementiert die Gruppenelemente $w\in F_2$ als Listen, die nur die Koeffizienten $n_1\in \Z$ und für $i>0$ $n_i\in \Z\backslash\{0\}$ aus der Darstellung $w=a^{n_1}b^{n_2}a^{n_3}b^{n_4}\ldots$ speichern. Wörter aus $F_2$, die mit $b$ beginnen, sind in dieser Darstellung genau die, für die $n_1=0$ gilt. Für das neutrale Element gibt es in dieser Darstellung 2 Möglichkeiten: entweder die leere Liste, oder die Liste, welche nur die $0$ enthält.\par
+Weiter implementiert die Klasse die Gruppenverknüpfung auf $F_2$.
+\item BarResElement\par
+Diese Klasse implementiert Elemente aus der Bar-Auflösung als assoziatives, geordnetes Datenfeld. Dadurch sind in Linearkombinationen auftretende Basiselemente garantiert eindeutig und Linearkombinationen untereinander direkt vergleichbar, da die Basiselemente geordnet sind.\par
+Die Klasse implementiert die Addition und Skalarmultiplikation von Elementen der Bar-Auflösung sowie deren $\ell^1$-Norm und den Randoperator. Die Klasse ist lediglich ein ,,Template'', d.h. der konkrete Datentyp der Koeffizienten der Bar-Auflösung kann gewählt werden (dies ermöglicht zum Beispiel exakte Arithmetik durch Implementation eines Datentyps für rationale Zahlen).
+\item BarResElementGenerator\par
+Diese Klasse ist abstrakt und lediglich eine Schnittstelle für beliebige Algorithmen zur Generierung von Elementen der Bar-Auflösung. Hierzu muss die (einzige) Methode der Klasse \lstinline|nextElement(int,int,int,int,int)| von abgeleiteten Klassen überschrieben werden.
+\item RandomGenerator\par
+Dies ist eine von BarResElementGenerator abgeleitete Klasse, welche Elemente der Bar-Auflösung ,,zufällig'' generiert. Sie benutzt einen Pseudozufallsgenerator mit Startwert, d.h. für gleichen Startwert und gleiche Eingabeparameter der Methode \lstinline|nextElement(int,int,int,int,int)| wird die gleiche Ausgabe generiert. Die Eingabeparameter sind dabei die folgenden:
+\begin{itemize}
+\item \lstinline|elementMaxlength| gibt die maximale Länge (in der $\Q$-Basis) der generierten Elemente der Bar-Auflösung an
+\item \lstinline|wordMaxlength| gibt die maximale Länge der Elemente aus $F_2$ an, die zur Konstruktion der Basisdarstellung des Elements verwendet werden
+\item \lstinline|expMax| gibt den maximalen Betrag der Koeffizienten an, den die generierten Elemente $w\in F_2$ besitzen, d.h. für $w=a^{n_1}b^{n_2}a^{n_3}b^{n_4}\ldots$ gilt $max(|n_1|,|n_2|,\\|n_3|,\ldots)\leq \text{\lstinline|expMax|}$.
+\item \lstinline|degree| legt den Grad fest, in dem die Elemente der Bar-Auflösung generiert werden. In unserem Fall ist dieser Parameter $4$.
+\item \lstinline|maxKoeff| legt den maximalen Betrag von Koeffizienten in der $\Q$-Basis\-darstellung von generierten Elementen fest. Für $x=\sum\limits_{i=1}^na_ix_i\in C_{\text{\lstinline|degree|}}^{\Q}(F_2)$ gilt also $max(|a_1|,|a_2|,|a_3|,\ldots)\leq \text{\lstinline|maxKoeff|}$
+\end{itemize}
+\end{itemize}
+Beim Ausführen des Programms müssen die gewünschte Größe des zu generierenden Datensatzes und die obigen Parameter eingegeben werden. Danach wird wiederholt die Methode \lstinline|nextElement(int,int,int,int,int)| aufgerufen und aus dem Ergebnis ein Tripel wie in \cref{bem:strategy} generiert, bis der Datensatz die gewünschte Größe erreicht hat. Der Datensatz wird als ,,experiment.csv'' im CSV-Format mit ,,;'' als Trennungszeichen gespeichert.
+\chapter{Auswertung des Experiments}
+
 \nocite{loeha}
 \nocite{loehb}
 \nocite{frigerio}
