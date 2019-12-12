@@ -701,7 +701,7 @@ Diese Klasse implementiert die Gruppenelemente $w\in F_2$ als Listen, die nur di
 Weiter implementiert die Klasse die Gruppenverknüpfung auf $F_2$.
 \item BarResElement\par
 Diese Klasse implementiert Elemente aus der Bar-Auflösung als assoziatives, geordnetes Datenfeld. Dadurch sind in Linearkombinationen auftretende Basiselemente garantiert eindeutig und Linearkombinationen untereinander direkt vergleichbar, da die Basiselemente geordnet sind.\par
-Die Klasse implementiert die Addition und Skalarmultiplikation von Elementen der Bar-Auflösung sowie deren $\ell^1$-Norm und den Randoperator. Die Klasse ist lediglich ein ,,Template'', d.h. der konkrete Datentyp der Koeffizienten der Bar-Auflösung kann gewählt werden (dies ermöglicht zum Beispiel exakte Arithmetik durch Implementation eines Datentyps für rationale Zahlen).
+Die Klasse implementiert die Addition und Skalarmultiplikation von Elementen der Bar-Auflösung sowie deren $\ell^1$-Norm und den Randoperator. Die Klasse ist lediglich eine Schablone, d.h. der konkrete Datentyp der Koeffizienten der Bar-Auflösung kann gewählt werden (dies ermöglicht zum Beispiel exakte Arithmetik durch Implementation eines Datentyps für rationale Zahlen).
 \item BarResElementGenerator\par
 Diese Klasse ist abstrakt und lediglich eine Schnittstelle für beliebige Algorithmen zur Generierung von Elementen der Bar-Auflösung. Hierzu muss die (einzige) Methode der Klasse \lstinline|nextElement(int,int,int,int,int)| von abgeleiteten Klassen überschrieben werden.
 \item RandomGenerator\par
@@ -713,10 +713,11 @@ Dies ist eine von BarResElementGenerator abgeleitete Klasse, welche Elemente der
 \item \lstinline|degree| legt den Grad fest, in dem die Elemente der Bar-Auflösung generiert werden. In unserem Fall ist dieser Parameter $4$.
 \item \lstinline|maxKoeff| legt den maximalen Betrag von Koeffizienten in der $\Q$-Basis\-darstellung von generierten Elementen fest. Für $x=\sum\limits_{i=1}^na_ix_i\in C_{\text{\lstinline|degree|}}^{\Q}(F_2)$ gilt also $max(|a_1|,|a_2|,|a_3|,\ldots)\leq \text{\lstinline|maxKoeff|}$
 \end{itemize}
+Da diese Klasse ebenfalls eine Schablone ist, können auch hier eigene Datentypen für die Koeffizienten benutzt werden.
 \end{itemize}
-Beim Ausführen des Programms müssen die gewünschte Größe des zu generierenden Datensatzes und die obigen Parameter eingegeben werden. Danach wird wiederholt die Methode \lstinline|nextElement(int,int,int,int,int)| aufgerufen und aus dem Ergebnis ein Tripel wie in \cref{bem:strategy} generiert, bis der Datensatz die gewünschte Größe erreicht hat. Der Datensatz wird als ,,experiment.csv'' im CSV-Format mit ,,;'' als Trennungszeichen gespeichert.
+Beim Ausführen des Programms müssen die gewünschte Größe des zu generierenden Datensatzes und die obigen Parameter eingegeben werden. Danach wird wiederholt die Methode \lstinline|nextElement(int,int,int,int,int)| aufgerufen und aus dem Ergebnis ein Tripel wie in \cref{bem:strategy} generiert, bis der Datensatz die gewünschte Größe erreicht hat. Der Datensatz wird als ,,experiment.csv'' im CSV-Format mit Semikolon als Trennungszeichen gespeichert.
 \chapter{Auswertung des Experiments}
-
+%TODO beschreiben des Datensatzes, Demonstration dass sich alle besonderen Elemente umschreiben lassen
 \nocite{loeha}
 \nocite{loehb}
 \nocite{frigerio}
