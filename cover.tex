@@ -1,0 +1,45 @@
+\documentclass[a4paper,10pt]{scrreprt}
+
+\usepackage{polyglossia}
+\setmainlanguage{german}
+\usepackage{graphicx}
+
+\newcommand{\leadingzero}[1]{\ifnum #1<10 0\the#1\else\the#1\fi} 
+ \newcommand{\todayA}{\leadingzero{\day}.\leadingzero{\month}.\the\year}
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+ 
+        \Huge
+        \textbf{Die Eigenschaft UBC auf freien Gruppen}
+ 
+        \vspace{0.5cm}
+        \LARGE
+        Schwerpunkt Globale Analysis
+ 
+        \vspace{1.5cm}
+ 
+        \textbf{Simon Lang}\\
+        \large 
+        Matrikelnr.: 1864218
+ 		
+ 		\vfill
+         \includegraphics[width=0.6\textwidth]{ur-logo-bildmarke-grau.png}
+ 
+        \vfill
+ 		\LARGE
+        Bachelorarbeit
+
+        \vspace{0.8cm}
+ 
+        \Large
+        Universität Regensburg\\
+        Abgabedatum: 02.01.2020\\
+        Druckdatum: \todayA\\
+        Betreuerin: Frau Prof. Dr. C. Löh
+ 
+    \end{center}
+\end{titlepage}
+\end{document}

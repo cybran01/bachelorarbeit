@@ -1,6 +1,7 @@
 \documentclass[a4paper,twoside,10pt]{scrreprt}
 
 \usepackage{polyglossia}
+\usepackage{pdfpages}
 \usepackage{csquotes}
 \usepackage{listings}
 \lstset{language=C++,
@@ -37,7 +38,8 @@
 \automark[chapter]{chapter}
 \ofoot{\pagemark}
 
-\newcommand {\img}{\text{im}~}
+\DeclareMathOperator{\img}{im}
+\newcommand{\UBC}{\text{UBC}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Q}{\mathbb{Q}}
@@ -71,17 +73,14 @@
     {\begin{proof}[Sketch of proof]}
     {\end{proof}}
 
-  \author{Simon~Lang (\textsf{simon1.lang@uni-regensburg.de})}
-  \date{02.01.2020}
-  \title{Die Eigenschaft UBC auf freien Gruppen}
-%  \subtitle{Subtitle}
+%  \author{Simon~Lang (\textsf{simon1.lang@uni-regensburg.de})}
+%  \date{02.01.2020}
+%  \title{Die Eigenschaft UBC auf freien Gruppen}
+%%  \subtitle{Subtitle}
 
 \begin{document}
 \pagenumbering{gobble}
-\maketitle
-%\begin{abstract}
-%Die Gruppenkohomologie von freien Gruppen ist vollständig bekannt. Für den funktionalanalytischen Zwilling der Gruppenkohomologie, der beschränkten Kohomologie von Gruppen, gilt dies jedoch nicht. Bereits für die freie Gruppe von Rang 2 ist sie für $n\geq 4$ unbekannt. In dieser Arbeit werden zunächst die für die Definition der beschränkten Kohomologie von Gruppen notwendigen Begriffe eingeführt und anschließend, basierend auf Resultaten von \cite{matsumoto}, die theoretische Grundlage für eine experimentelle Überprüfung geschaffen. Der Abschluss der Arbeit ist eine beispielhafte Implementation einer solchen Überprüfung in der Programmiersprache C++.
-%\end{abstract}
+\includepdf{cover.pdf}
 \begin{abstract}
 Die Gruppenkohomologie für eine freie Gruppe $F_n$ von Rang $n$ ist vollständig bekannt. So gilt beispielweise mit $\R$-Koeffizienten (und trivialer Gruppenwirkung auf $\R$)
 \begin{equation*}
@@ -168,7 +167,7 @@ Die Kategorie $\prescript{}{R}{\text{Ch}}$ ist die Kategorie der (Links-)$R$-Ket
 \end{tikzpicture}
 \end{center}
 kommutiert. Die Verknüpfung von Morphismen ist durch die gradweise Abbildungsverknüpfung gegeben.\par
-Weiter bezeichnen wir im folgenden Elemente aus $C_n$ als \textit{(n-)Ketten}, Elemente aus $\text{ker}~\partial_n$ als \textit{(n-)Zykel} und Elemente aus $\text{im}~\partial_{n+1}$ als \textit{(n-)Ränder}.
+Weiter bezeichnen wir im folgenden Elemente aus $C_n$ als \textit{(n-)Ketten}, Elemente aus $\ker\partial_n$ als \textit{(n-)Zykel} und Elemente aus $\img\partial_{n+1}$ als \textit{(n-)Ränder}.
 \end{definition}
 
 \begin{definition}[Homologie von Kettenkomplex]
@@ -176,7 +175,7 @@ Wir definieren für alle $n\in \Z$ Funktoren $H_n:\prescript{}{R}{\text{Ch}}\to 
 \begin{itemize}
 \item auf Objekten:
 \begin{equation*}
-H_n(C_*):=\frac{\text{ker}~\partial_n}{\text{im}~\partial_{n+1}}
+H_n(C_*):=\frac{\ker\partial_n}{\img\partial_{n+1}}
 \end{equation*}
 \item auf Morphismen:\par
 Seien $C_*,D_*\in \text{Ob}(\prescript{}{R}{\text{Ch}})$ und $f\in \text{Hom}_{\prescript{}{R}{\text{Ch}}}(C_*,D_*)$. Dann ist 
@@ -212,7 +211,7 @@ Die Kategorie $\prescript{}{R}{\text{KoCh}}$ ist die Kategorie der (Links-)$R$-K
 \end{tikzpicture}
 \end{center}
 kommutiert. Die Verknüpfung von Morphismen ist wieder durch die gradweise Abbildungsverknüpfung gegeben.\par
-Weiter bezeichnen wir im folgenden Elemente aus $C^n$ als \textit{(n-)Koketten}, Elemente aus $\text{ker}~\delta^n$ als \textit{(n-)Kozykel} und Elemente aus $\text{im}~\delta^{n-1}$ als \textit{(n-)Koränder}.
+Weiter bezeichnen wir im folgenden Elemente aus $C^n$ als \textit{(n-)Koketten}, Elemente aus $\ker\delta^n$ als \textit{(n-)Kozykel} und Elemente aus $\img\delta^{n-1}$ als \textit{(n-)Koränder}.
 \end{definition}
 
 \begin{definition}[Kohomologie von Kokettenkomplex]\label{def:DefCohomCochain}
@@ -220,7 +219,7 @@ Wir definieren für alle $n\in \Z$ Funktoren $H^*:\prescript{}{R}{\text{KoCh}}\t
 \begin{itemize}
 \item auf Objekten:
 \begin{equation*}
-H^n(C^*):=\frac{\text{ker}~\delta^n}{\text{im}~\delta^{n-1}}
+H^n(C^*):=\frac{\ker\delta^n}{\img\delta^{n-1}}
 \end{equation*}
 \item auf Morphismen:\par
 Seien $C^*,D^*\in \text{Ob}(\prescript{}{R}{\text{KoCh}})$ und $f\in \text{Hom}_{\prescript{}{R}{\text{KoCh}}}(C^*,D^*)$. Dann ist 
@@ -232,11 +231,11 @@ eine wohldefinierte, lineare Abbildung. (Dies folgt aus der universellen Eigensc
 \end{itemize}
 Aus dieser Konstruktion folgt sofort, dass $H^n$ ein Funktor ist.
 \end{definition}
-Im folgenden wird häufig der Fall von (Ko)Kettenkomplexen auftreten, die nicht über $\Z$ sondern über $\N$ indiziert sind. In diesem Fall sind die verbleibenden Indizes mit Nullmoduln und trivialen (Ko)Randoperatoren zu ergänzen. Wir benutzen für Kettenkomplexe und Homologie untere Indices sowie obere Indices für Kokettenkomplexe und Kohomologie.
+Im folgenden wird häufig der Fall von (Ko)Kettenkomplexen auftreten, die über $\N$ statt $\Z$ indiziert sind. In diesem Fall sind die verbleibenden Indizes mit Nullmoduln und trivialen (Ko)Randoperatoren zu ergänzen. Wir benutzen für Kettenkomplexe und Homologie untere Indices sowie obere Indices für Kokettenkomplexe und Kohomologie.
 
 \section{Bar-Auflösung und elementare Eigenschaften}
 Im folgenden sei $G$ eine Gruppe.
-Wir definieren nun die Bar-Auflösung $C_*{G}$ der Gruppe $G$. Auf dieser Konstruktion aufbauend werden wir sowohl Gruppenkohomologie als auch beschränkte Kohomologie von Gruppen konstruieren.
+Wir definieren nun die Bar-Auflösung $C_*(G)$ der Gruppe $G$. Auf dieser Konstruktion aufbauend werden wir sowohl Gruppenkohomologie als auch beschränkte Kohomologie von Gruppen konstruieren.
 \begin{definition}[Die Bar-Auflösung $C_*(G)$]\label{def:BarRes}
 Für $n\in \N$ definiere
 \begin{equation*}
@@ -321,7 +320,7 @@ womit $\partial_n\circ \partial_{n+1}([g_1|\ldots|g_{n+1}])=0$ folgt.
 \end{lemma}
 
 \begin{satz}[Eine $\Z$-Basis der Bar-Auflösung]\label{satz:ZBasisOfBarRes}
-Die $\Z [G]$-Moduln $C_n(G)$ der Bar-Auflösung besitzen eine $\Z$-Basis und diese ist für $n\in \N$ gegeben durch $\{g_0\cdot [g_1|\ldots|g_n]\in C_n(G):(g_0,g_1,\ldots,g_n)\in G^{n+1}\}$.
+Die $\Z [G]$-Moduln $C_n(G)$ der Bar-Auflösung besitzen eine $\Z$-Basis und diese ist für $n\in \N$ gegeben durch $\{g_0\cdot [g_1|\ldots|g_n]\in C_n(G):(g_0,g_1,\ldots,g_n)\in G^{n+1}\}\subset C_n(G)$.
 \begin{proof}
 Nach Konstruktion gilt $C_n(G)=\bigoplus\limits_{G^n} \Z[G]$ und $\Z[G]\cong_{\prescript{}{\Z}{\text{Mod}}}\bigoplus\limits_{g\in G} \Z$. Wenn wir also $\Z[G]$ als $\Z$-Modul auffassen, gilt 
 \begin{equation*}
@@ -453,7 +452,7 @@ Wir haben für eine Gruppe $G$ folgende Kettenkomplexe definiert:
 \item Die normierte Bar-Auflösung $C_*^{\R}(G)$ mit $\R$-Koeffizienten und $\ell^1$-Norm
 \item Die normierte, vervollständigte Bar-Auflösung $C_*^{\ell^1}(G)$ mit $\R$-Koeffizienten und $\ell^1$-Norm (auch genannt $\ell^1$-Kettenkomplex, siehe \cref{def:Ell1ChainComplex}),
 \end{itemize}
-wobei $C_*^{\Q}(G)\xhookrightarrow{\text{incl}}C_*^{\R}(G)$ ein isometrischer $\Q$-Kettenmorphismus (mit der $\R$-Multipli\-kation von $C_*^{\R}(G)$ auf $\Q$ eingeschränkt) und $C_*^{\R}(G)\xhookrightarrow{\text{incl}}C_*^{\ell^1}(G)$ ein isometrischer $\R$-Ketten\-morphismus ist.\par
+wobei $C_*^{\Q}(G)\xhookrightarrow{\text{incl}}C_*^{\R}(G)$ ein isometrischer $\Q$-Kettenmorphismus (mit der $\R$-Multipli\-kation von $C_*^{\R}(G)$ auf $\Q$ eingeschränkt) und $C_*^{\R}(G)\xhookrightarrow{\text{incl}}C_*^{\ell^1}(G)$ ein isometrischer $\R$-Kettenmorphismus ist. Wir bezeichnen die Homologie von $C_*^{\Q}(G)$ mit $H_*(G,\Q)$ und die Homologie von $C_*^{\R}(G)$ mit $H_*(G,\R)$.\par
 Weiter haben wir folgende Kokettenkomplexe definiert:
 \begin{itemize}
 \item Den Kokettenkomplex $C_{\R}^*(G)$ der Gruppenkohomologie mit $\R$-Koeffizienten
@@ -509,10 +508,22 @@ Beispielweise ist die beschränkte Kohomologie $H_b^*(F_2,\R)$ mit $F_2$ als fre
 \end{bemerkung}
 
 \section{Die Eigenschaft UBC und die Vergleichsabbildung}\label{sec:UBCandComparisonMap}
-\begin{definition}[Die Eigenschaften UBC, $\text{UBC}^{\ell^1}$ und $\text{UBC}^{\Q}$]\label{def:DefUBCProperty}
-Sei $G$ eine Gruppe. Wir sagen, dass $G$ die Eigenschaft $q$-UBC für ein $q\in \N$ erfüllt, wenn ein $K>0$ existiert, sodass für alle $z\in \text{im~} \partial_{q+1}^{\R}$ ein $c\in C_{q+1}^{\R}(G)$ mit $\partial_{q+1}^{\R}(c)=z$ und $\|c\|_1\leq K\|z\|_1$ existiert.\par
-Es erfüllt $G$ die Eigenschaft $q$-$\text{UBC}^{\ell^1}$, wenn ein $K>0$ existiert, sodass für alle $z\in \text{im~} \partial_{q+1}^{\ell^1}$ ein $c\in C_{q+1}^{\ell^1}(G)$ mit $\partial_{q+1}^{\ell^1}(c)=z$ und $\|c\|_1\leq K\|z\|_1$ existiert.\par
-Analog erfüllt $G$ die Eigenschaft $q$-$\text{UBC}^{\Q}$, wenn ein $K>0$ existiert, sodass für alle $z\in \text{im~} \partial_{q+1}^{\Q}$ ein $c\in C_{q+1}^{\Q}(G)$ mit $\partial_{q+1}^{\Q}(c)=z$ und $\|c\|_1\leq K\|z\|_1$ existiert.
+
+\begin{definition}[Die Eigenschaft UBC]
+Sei $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ ein normierter $\R$-Kettenkom\-plex (d.h. die $D_*^{\R}$ sind normierte $\R$-Vektorräume und die Randoperatoren $\partial_*^{\R}$ sind stetige, lineare Abbildungen).\par
+Wir sagen, dass $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-UBC für ein $q\in \N$ erfüllt, wenn ein $K>0$ existiert, sodass für alle $z\in \img\partial_{q+1}^{\R}$ ein $c\in D_{q+1}^{\R}$ mit $\partial_{q+1}^{\R}(c)=z$ und $\|c\|\leq K\|z\|$ existiert.
+\end{definition}
+
+\begin{definition}[Die Eigenschaften $\text{UBC}^{\Q}$ und $\overline{\text{UBC}}$]\label{def:DefUBCProperty}
+Sei $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ ein $\Q$-Unter\-kettenkomplex eines normierten $\R$-Kettenkomplexes $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ (d.h. ein Unterkettenkomplex des Kettenkomplexes, den man erhält wenn man die $\R$-Skalarmultiplikation  von $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ auf $\Q$ einschränkt).\par
+Wir sagen, dass $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)\subset \bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\text{UBC}^{\Q}$ für ein $q\in \N$ erfüllt, wenn ein $K>0$ existiert, sodass für alle $z\in \img\partial_{q+1}^{\Q}$ ein $c\in D_{q+1}^{\Q}$ mit $\partial_{q+1}^{\Q}(c)=z$ und $\|c\|\leq K\|z\|$ existiert.\par
+Seien $\overline{D_*^{\R}}$ die Vervollständigungen von $D_*^{\R}$ und $\overline{\partial_*^{\R}}:\overline{D_*^{\R}}\to \overline{D_{*-1}^{\R}}$ die stetigen Fortsetzungen der Randoperatoren $\partial_*^{\R}$. Wir sagen, dass $\bigl(\overline{D_*^{\R}},\overline {\partial_*^{\R}}\bigr)\supset \bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\overline{\text{UBC}}$ erfüllt, wenn $\bigl(\overline{D_*^{\R}},\overline {\partial_*^{\R}}\bigr)$ die Eigenschaft UBC erfüllt.
+\end{definition}
+
+\begin{definition}[Die UBC-Eigenschaften für Gruppen]\label{def:UBCforGroups}
+Sei $G$ eine Gruppe und $q\in\N$. Wir sagen, dass $G$ die Eigenschaft $q$-UBC erfüllt, wenn $\bigl(C_*^{\R}(G),\partial_*^{\R}\bigr)$ die Eigenscnaft $q$-UBC erfüllt.\par
+Wir sagen, dass $G$ die Eigenschaft $q$-$\text{UBC}^{\Q}$ erfüllt, wenn $\bigl(C_*^{\Q}(G),\partial_*^{\Q}\bigr)\subset \bigl(C_*^{\R}(G),\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\text{UBC}^{\Q}$ erfüllt.\par
+Weiter erfüllt $G$ die Eigenschaft $q$-$\text{UBC}^{\ell^1}$, wenn $\bigl(C_*^{\ell^1}(G),\partial_*^{\ell^1}\bigr)\supset \bigl(C_*^{\R}(G),\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\overline{\text{UBC}}$ erfüllt.
 \end{definition}
 
 \begin{lemma}[Existenz schnell konvergenter Reihen]\label{lem:FastConvergingSeries}
@@ -525,63 +536,57 @@ Weiter gilt $\sum\limits_{i=0}^{\infty}\|a_i\|=\|a_0\|+\sum\limits_{i=1}^{\infty
 \end{proof}
 \end{lemma}
 
-Das folgende Resultat, welches den Zusammenhang zwischen UBC und der Vergleichsabbildung darstellt, ist im Wesentlichen \cite[Theorem 2.8]{matsumoto}.
-\begin{satz}[UBC, $\text{UBC}^{\ell^1}$ und die Vergleichsabbildung]\label{satz:UBCandComparisonMap}
-Sei $G$ eine Gruppe, $q\in \N$. Folgende Aussagen sind äquivalent:
-\renewcommand{\labelenumi}{(\roman{enumi}) }
+\begin{satz}[$\UBC^{\Q}$ und $\overline{\UBC}$]\label{satz:UBCandDenseQSubcomplexes}
+Sei $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ ein dichter $\Q$-Unterkettenkomplex eines normierten $\R$-Kettenkomplexes $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$, für den
+\begin{align*}
+\R\otimes_{\Q}H_*(D_*^{\Q})&\to H_*(D_*^{\R})\\
+r\otimes [x] &\mapsto r[x]
+\end{align*}
+ein Isomorphismus ist. Dann sind für $q\in\N$ äquivalent:
+\renewcommand{\labelenumi}{(\roman{enumi})}%TODO WHY DIS NOT WORKING
 \begin{enumerate}
-\item $G$ erfüllt $q$-UBC
-\item $G$ erfüllt $q$-$\text{UBC}^{\ell^1}$ und $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$
-\item $c^{q+1}:H_b^{q+1}(G,\R)\to H^{q+1}(G,\R)$ ist injektiv
+\item $\bigl(D_*^{\R},\partial_*^{\R}\bigr)\supset \bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ erfüllt $q$-$\text{UBC}^{\Q}$
+\item $\bigl(D_*^{\R},\partial_*^{\R}\bigr)\subset\bigl(\overline{D_*^{\R}},\overline{\partial_*^{\R}}\bigr)$ erfüllt $q$-$\overline{\text{UBC}}$ und $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \overline{\partial_{q+1}^{\R}}$
 \end{enumerate}
 \begin{proof}
-$(i)\implies(ii)$:
+$(i)\implies (ii)$:\par
 \begin{itemize}
-\item Wir zeigen zuerst $q$-$\text{UBC}^{\ell^1}$.\par
-Nach Konstruktion ist $\img \partial_{q+1}^{\R}$ dicht in $\img \partial_{q+1}^{\ell^1}$. Sei nun $z\in \img \partial_{q+1}^{\ell^1}$ und eine Folge $\bigl(z_i\in \img \partial_{q+1}^{\R}\bigr)_{i\in \N}$ mit $\sum\limits_{i=0}^{\infty}z_i=z$ und $\sum\limits_{i=0}^{\infty}\|z_i\|_1\leq 2\|z\|_1$ (diese existiert nach \cref{lem:FastConvergingSeries}). 
-Nach $q$-UBC existieren nun $c_i\in C_{q+1}^{\R}(G)$ mit $\partial_{q+1}^{\R}(c_i)=z_i$ und $\|c_i\|_1\leq K\|z_i\|_1$. Setze $c=\sum\limits_{i=0}^{\infty}c_i$. Dies ist wohldefiniert, da $\sum\limits_{i=0}^{\infty}\|c_i\|_1\leq 2K\|z\|_1$ gilt und $C_{q+1}^{\ell^1}(G)$ vollständig ist. Insbesondere folgt $\partial_{q+1}^{\ell^1}(c)=z$ und $\|c\|_1\leq 2K\|z\|_1$, d.h. $q$-$\text{UBC}^{\ell^1}$ ist erfüllt.\par
-\item Wir zeigen nun, dass $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist.\par
-Sei $z\in \ker \partial_{q+1}^{\ell^1}$ und sei $\bigl(z_i\in C_{q+1}^{\R}(G)\bigr)_{i\in \N}$ eine gegen $z$ konvergente Folge. Wähle mit $q$-UBC Elemente $\bigl(d_i\in C_{q+1}^{\R}(G)\bigr)_{i\in \N}$ mit $\partial_{q+1}^{\R}(d_i)=-\partial_{q+1}^{\R}(z_i)$ und $\|d_i\|_1\leq K\|\partial_{q+1}^{\R}(z_i)\|_1$. Offenbar gilt $z_i+d_i\in \ker \partial_{q+1}^{\R}$. Weiter gilt $\|z_i+d_i-z\|_1\leq \|z_i-z\|_1+\|d_i\|_1\leq  \|z_i-z\|_1+K\|\partial_{q+1}^{\R}(z_i)\|_1$. Da $\|\partial_{q+1}^{\R}(z_i)\|_1=\|\partial_{q+1}^{\R}(z_i-z)\|_1\leq (q+2)\|z_i-z\|_1$ und $\|z_i-z\|_1$ nach Definition für $i\to \infty$ gegen $0$ konvergiert, konvergiert $z_i+d_i$ gegen $z$, d.h. $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$.
+\item Wir zeigen zuerst $q$-$\overline{\UBC}$.\par
+Nach Konstruktion ist $\img \partial_{q+1}^{\Q}$ dicht in $\img \overline{\partial_{q+1}^{\R}}$. Sei nun $z\in \img \overline{\partial_{q+1}^{\R}}$ und $\bigl(z_i\in \img \partial_{q+1}^{\Q}\bigr)_{i\in \N}$ eine Folge mit $\sum\limits_{i=0}^{\infty}z_i=z$ und $\sum\limits_{i=0}^{\infty}\|z_i\|\leq 2\|z\|$ (diese existiert nach \cref{lem:FastConvergingSeries}). 
+Nach $q$-$\UBC^{\Q}$ existieren nun $c_i\in D_{q+1}^{\Q}$ mit $\partial_{q+1}^{\Q}(c_i)=z_i$ und $\|c_i\|\leq K\|z_i\|$. Setze $c=\sum\limits_{i=0}^{\infty}c_i$. Dies ist wohldefiniert, da $\sum\limits_{i=0}^{\infty}\|c_i\|\leq 2K\|z\|$ gilt und $\overline{D_{q+1}^{\R}}$ vollständig ist. Insbesondere folgt $\overline{\partial_{q+1}^{\R}}(c)=z$ und $\|c\|\leq 2K\|z\|$, d.h. $q$-$\overline{\UBC}$ ist erfüllt.\par
+\item Wir zeigen nun, dass $\ker \partial_{q+1}^{\R}$ dicht in $\ker \overline{\partial_{q+1}^{\R}}$ ist.\par
+Sei $z\in \ker \overline{\partial_{q+1}^{\R}}$ und sei $\bigl(z_i\in D_{q+1}^{\Q}\bigr)_{i\in \N}$ eine gegen $z$ konvergente Folge. Wähle mit $q$-$\UBC^{\Q}$ Elemente $\bigl(d_i\in D_{q+1}^{\Q}\bigr)_{i\in \N}$ mit $\partial_{q+1}^{\Q}(d_i)=-\partial_{q+1}^{\Q}(z_i)$ und $\|d_i\|\leq K\|\partial_{q+1}^{\Q}(z_i)\|$. Offenbar gilt $z_i+d_i\in \ker \partial_{q+1}^{\Q}$. Weiter gilt $\|z_i+d_i-z\|\leq \|z_i-z\|_1+\|d_i\|\leq\|z_i-z\|+K\|\partial_{q+1}^{\Q}(z_i)\|$. Da $\|\partial_{q+1}^{\Q}(z_i)\|=\|\partial_{q+1}^{\Q}(z_i-z)\|\leq (q+2)\|z_i-z\|$ und $\|z_i-z\|$ nach Definition für $i\to \infty$ gegen $0$ konvergiert, konvergiert $z_i+d_i$ gegen $z$, d.h. $\ker \partial_{q+1}^{\Q}$ ist dicht in $\ker \overline{\partial_{q+1}^{\R}}$. Wegen $\ker \partial_{q+1}^{\Q}\subset\ker \partial_{q+1}^{\R}$ ist damit $\ker \partial_{q+1}^{\R}$ dicht in $\ker \overline{\partial_{q+1}^{\R}}$.
 \end{itemize}
 $(ii)\implies(i)$:\par
-Sei nun $z\in \img \partial_{q+1}^{\R}$. Wähle $c\in C_{q+1}^{\R}(G)$ mit $ \partial_{q+1}^{\R}(c)=z$ sowie mit $q$-$\text{UBC}^{\ell^1}$ ein $d\in C_{q+1}^{\ell^1}(G)$ mit $\partial_{q+1}^{\ell^1}(d)=z$ und $\|d\|_1\leq K\|z\|_1$. Da $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist, gibt es eine Folge $\bigl(e_i\in \ker \partial_{q+1}^{\R}\bigr)_{i\in\N}$ die gegen $d-c$ konvergiert. Wähle $j\in \N$ so groß, dass $\|d-c-e_j\|_1\leq \|z\|_1$. Dann gilt $c+e_j\in C_{q+1}^{\R}(G)$ und $\partial_{q+1}^{\R}(c+e_j)=\partial_{q+1}^{\R}(c)=z$ sowie $\|c+e_j\|_1=\|d-c-e_j-d\|_1\leq \|d-c-e_j\|_1+\|d\|_1\leq (K+1)\|z\|_1$, womit $q$-UBC erfüllt ist.\par\noindent
-$(ii)\implies (iii)$:\par
-Sei $f\in \ker \delta_{\R,b}^{q+1}$ mit $c^{q+1}([f])=0$, d.h. es existiert ein $F\in C_{\R}^q(G)$ mit $(-1)^{q+1}\delta_{\R}^q(F)=F\circ \partial_{q+1}^{\R}=f$. Somit ist $f=0$ auf $\ker \partial_{q+1}^{\R}$. Da $f$ stetig ist und $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ liegt, verschwindet die Fortsetzung von $f$ nach $C^{\ell^1}_{q+1}(G)$ sogar auf $\ker \partial_{q+1}^{\ell^1}$ und induziert damit eine beschränkte Abbildung $\overline{f}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \R$. Genauso induziert $\partial_{q+1}^{\ell^1}$ eine beschränkte und bijektive Abbildung $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$. Aus $q$-$\text{UBC}^{\ell^1}$ folgt, dass $\|\overline{\partial_{q+1}^{\ell^1}}^{-1}(x)\|_1\leq K\|x\|_1$ gilt, d.h. die Umkehrabbildung ist stetig. Mit dem Satz von Hahn-Banach können wir $\overline{f}\circ \overline{\partial_{q+1}^{\ell^1}}^{-1}:\img \partial_{q+1}^{\ell^1}\to \R$ fortsetzen zu einem stetigen, linearen Funktional $\overline{F_b}:C_q^{\ell^1}(G)\to \R$. Dessen Einschränkung $F_b:C^{\R}_q(G)\to \R$ erfüllt $(-1)^{q+1}\delta_{\R,b}^q(F_b)=F_b\circ \partial_{q+1}^{\R}=f$ nach Konstruktion, d.h. $[f]=0$ in $H_b^{q+1}(G,\R)$, womit $c^{q+1}$ injektiv ist.\par\noindent
-$(iii)\implies (ii)$:
-\begin{itemize}
-\item Wir zeigen zuerst $q$-$\text{UBC}^{\ell^1}$.\par
-Dazu zeigen wir zunächst, dass $\img \partial_{q+1}^{\ell^1}$ abgeschlossen in $C_{q+1}^{\ell^1}(G)$, d.h. ein Banachraum ist. Nach dem Satz vom abgeschlossenen Bild ist dies genau dann der Fall, wenn der duale Operator ein abgeschlossenes Bild besitzt. Da wir aber für alle $n\in \N$ $\BHom[\R{[}G{]}]{C_n^{\ell^1}(G),\R}$ mit $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}$ identifizieren können (da $\R$ vollständig ist), ist dies äquivalent dazu, dass $\delta_{\R,b}^q$ abgeschlossenes Bild besitzt. Sei also $\bigl(f_i\in \img \delta_{\R,b}^q\bigr)_{i\in \N}$ eine konvergente Folge mit Grenzwert $f$ (der offenbar in $\ker \delta_{\R,b}^{q+1}$ liegen muss, da $\ker \delta_{\R,b}^{q+1}$ abgeschlossen ist). Dann ist $f=0$ auf $\ker \partial_{q+1}^{\R}$ und induziert somit eine Abbildung $\overline{f}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \R$. Weiter erhalten wir aus $\partial_{q+1}^{\R}$ einen Isomorphismus (im Sinne linearer Abbildungen, i.A. nicht im Sinne stetiger, linearer Abbildungen) $\overline{\partial_{q+1}^{\R}}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \img \partial_{q+1}^{\R}$. Es ist also $\overline{f}\circ\overline{\partial_{q+1}^{\R}}^{-1}:\img \partial_{q+1}^{\R}\to \R$ eine lineare, aber nicht notwendigerweise stetige Abbildung.
-Wir setzen diese zu einer linearen Abbildung $F:C_q^{\R}(G)\to \R$ fort.
-Dann gilt $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt somit, dass $f\in \img \delta_{\R,b}^q$, also ist $\img \partial_{q+1}^{\ell^1}$ abgeschlossen.\par
-Daraus folgt aus dem Prinzip der offenen Abbildung, dass $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$ ein Isomorphismus (hier im Sinne stetiger, linearer Abbildungen) ist. Es sei $\|\cdot\|_{\text{quot}}$ die Quotientennorm auf $\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}$. Dann existiert damit ein $K>0$, sodass für alle $z\in \img \partial_{q+1}^{\ell^1}$ ein $c\in C_{q+1}^{\ell^1}(G)$ existiert mit $\partial_{q+1}^{\R}(c)=z$, $2\|[c]\|_{\text{quot}}\leq K\|z\|_1$ und $\|c\|_1\leq 2\|[c]\|_{\text{quot}}$, womit $q$-$\text{UBC}^{\ell^1}$ erfüllt ist.\par
-\item Wir zeigen nun, dass $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist.\par
-Angenommen, es existiert $x\in \ker \partial_{q+1}^{\ell^1}\backslash\overline{\ker \partial_{q+1}^{\R}}$. Dann existiert nach Hahn-Banach ein stetiges Funktional $\overline{f}:C_{q+1}^{\ell^1}(G)\to \R$ mit $\overline{f}=0$ auf $\overline{\ker \partial_{q+1}^{\R}}$ und $\overline{f}(x)=1$. Außerdem verschwindet die aus $\overline{f}$ durch Einschränken auf $C_{q+1}^{\R}(G)$ gewonnene Abbildung $f:C_{q+1}^{\R}(G)\to \R$ auf $\ker \partial_{q+1}^{\R}$. Analog zu vorherigem Teil konstruieren wir daraus eine (nicht notwendigerweise stetige) lineare Abbildung $F:C_q^{\R}(G)\to \R$ mit $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt daraus, dass ein stetiges, lineares Funktional $F_b:C_q^{\R}(G)\to \R$ existiert mit $F_b\circ \partial_{q+1}^{\R}=f$. Aus der Eindeutigkeit der Fortsetzung auf die Vervollständigung folgt $\overline{F_b}\circ \partial_{q+1}^{\ell^1}=\overline{f}$. Dies ist aber ein Widerspruch, denn $1=\overline{f}(x)=\overline{F_b}\circ \partial_{q+1}^{\ell^1}(x)=0$. Damit folgt, dass $\ker \partial_{q+1}^{\ell^1}=\overline{\ker \partial_{q+1}^{\R}}$, d.h. $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$.
-\end{itemize}
+Wir zeigen zunächst, dass $\ker\partial_{q+1}^{\Q}\subset \ker\partial_{q+1}^{\R}$ dicht ist. Sei also $z\in \ker\partial_{q+1}^{\R}$. Aus dem Isomorphismus $\R\otimes_{\Q}H_*(D_*^{\Q})\to H_*(D_*^{\R})$ folgt, dass $b\in D_{q+2}^{\R}$ und $n\in\N,a_1,\ldots,a_n\in\R,z_1,\ldots,z_n\in \ker\partial_{q+1}^{\Q}$ mit 
+\begin{equation*}
+\partial_{q+2}^{\R}(b)+\sum\limits_{i=1}^n\lambda_iz_i=z
+\end{equation*}
+existieren. Wähle nun eine Folge $\bigl(b_j\in D_{q+2}^{\Q}\bigr)$ mit $\lim\limits_{j\to\infty}b_j=b$ und für alle $i\in \{1,\ldots,n\}$ eine Folge $\bigl(\lambda_{i_j}\in\Q\bigr)_{j\in\N}$ mit $\lim\limits_{j\to\infty}\lambda_{i_j}=\lambda_i$.\par
+Definiere dann $z_j:=\partial_{q+2}^{\Q}(b_j)+\sum\limits_{i=1}^n\lambda_{i_j}z_i$. Offenbar gilt dann $z_j\in\ker\partial_{q+1}^{\Q}$ für $j\in\N$. Weiter gilt $\lim\limits_{j\to\infty}\|z-z_j\|\leq \lim\limits_{j\to\infty}\|\partial_{q+2}^{\R}(b-b_j)\|+\lim\limits_{j\to\infty}\sum\limits_{i=1}^n|\lambda_i-\lambda_{i_j}|\|z_i\|\leq (q+3)\lim\limits_{j\to\infty}\|b-b_j\|+\sum\limits_{i=1}^n\lim\limits_{j\to\infty}|\lambda_i-\lambda_{i_j}|\|z_i\|=0$, d.h. $\lim\limits_{j\to\infty}z_j=z$. Also ist $\ker\partial_{q+1}^{\Q}$ dicht in $\ker\partial_{q+1}^{\R}$.\par
+Nach Voraussetzung ist $\ker \partial_{q+1}^{\R}$ dicht in $\ker \overline{\partial_{q+1}^{\R}}$ und somit folgt, dass $\ker \partial_{q+1}^{\Q}$ dicht in $\ker \overline{\partial_{q+1}^{\R}}$ ist.\par
+Sei nun $z\in \img \partial_{q+1}^{\Q}$. Wähle $c\in D_{q+1}^{\Q}$ mit $\partial_{q+1}^{\Q}(c)=z$ sowie mit $q$-$\overline{\UBC}$ ein $d\in \overline{D_{q+1}^{\R}}$ mit $\overline{\partial_{q+1}^{\R}}(d)=z$ und $\|d\|\leq K\|z\|$. Da $\ker \partial_{q+1}^{\Q}$ dicht in $\ker \overline{\partial_{q+1}^{\R}}$ ist, gibt es eine Folge $\bigl(e_i\in \ker \partial_{q+1}^{\Q}\bigr)_{i\in\N}$ die gegen $d-c$ konvergiert. Wähle $j\in \N$ so groß, dass $\|d-c-e_j\|\leq \|z\|$. Dann gilt $c+e_j\in D_{q+1}^{\Q}$ und $\partial_{q+1}^{\Q}(c+e_j)=\partial_{q+1}^{\Q}(c)=z$ sowie $\|c+e_j\|=\|d-c-e_j-d\|\leq \|d-c-e_j\|+\|d\|\leq (K+1)\|z\|$, womit $q$-$\UBC^{\Q}$ erfüllt ist.
 \end{proof}
 \end{satz}
 
-\begin{lemma}\label{lem:CQdenseInCR}
-Der $\Q$-Vektorraum $C_{n}^{\Q}(G)$ liegt dicht in $C_{n}^{\R}(G)$.
-\begin{proof}
+\begin{satz}\label{satz:QFulfillsConditions}
+Sei $G$ eine Gruppe.
+Dann gilt, dass $\bigl(C_*^{\Q}(G),\partial_*^{\Q}(G)\bigr)\subset (C_*^{\R}(G),\partial_*^{\R}(G)\bigr)$ ein dichter $\Q$-Unterkettenkomplex und
+\begin{align*}
+\R\otimes_{\Q}H_*(G,\Q)&\to H_*(G,\R)\\
+r\otimes [x] &\mapsto r[x]
+\end{align*}
+ein Isomorphismus ist.
+\begin{proof}\hfill
+\begin{itemize}
+\item Wir zeigen zuerst, dass $\bigl(C_*^{\Q}(G),\partial_*^{\Q}(G)\bigr)\subset (C_*^{\R}(G),\partial_*^{\R}(G)\bigr)$ dicht ist.\par
 Sei $x=\sum\limits_{g\in G^{n+1}} a_g\cdot g\in C_n^{\R}(G)$ in $\R$-Basisdarstellung. Wähle für alle $a_g\neq 0$ (dies sind endlich viele) eine Folge $\bigl(a_{g,i}\in \Q\bigr)_{i\in\N}$ mit $\lim\limits_{i\to \infty}a_{g,i}=a_g$. Setze anschließend $x_i:=\sum\limits_{g\in G^{n+1}}a_{g,i}\cdot g\in C_n^{\Q}(G)$. Dann gilt $\|x-x_i\|_1=\biggl\|\sum\limits_{g\in G^{n+1}}(a_g-a_{g,i})\cdot g\biggr\|_1=\sum\limits_{g\in G^{n+1}}\lvert a_g-a_{g,i}\rvert$, d.h. es folgt $\lim\limits_{i\to\infty}x_i=x$.
-\end{proof}
-\end{lemma}
-
-\begin{satz}[$\text{UBC}^{\Q}$ und $\text{UBC}^{\ell^1}$]\label{satz:QUBCandComparisonMap}
-Sei $G$ eine Gruppe, $q\in \N$. Dann sind äquivalent:
-\renewcommand{\labelenumi}{(\roman{enumi}) }
-\begin{itemize}
-\item $G$ erfüllt $q$-$\text{UBC}^{\Q}$
-\item $G$ erfüllt $q$-$\text{UBC}^{\ell^1}$ und $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$
-\end{itemize}
-\begin{proof}
-Nach \cref{lem:CQdenseInCR} ist $C_n^{\Q}(G)\subset C_n^{\R}(G)$ dicht, womit $C_n^{\Q}(G)\subset C_n^{\ell^1}(G)$ und $\img\partial_n^{\Q}\subset \img\partial_n^{\ell^1}$ dicht sind.
-Deswegen können wir analog zu dem Teil $(i)\Longleftrightarrow(ii)$ aus \cref{satz:UBCandComparisonMap} verfahren:
-\begin{itemize}
-\item $(i)\implies (ii)$:\par
-Der Beweis von $q\text{-UBC}^{\ell^1}$ verläuft wie in \cref{satz:UBCandComparisonMap}. Statt der Dichtheit von $\ker \partial_{q+1}^{\R}$ in $\ker \partial_{q+1}^{\ell^1}$ zeigen wir jedoch, dass $\ker \partial_{q+1}^{\Q}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist. Hieraus folgt wegen $\ker \partial_{q+1}^{\Q}\subset \ker \partial_{q+1}^{\R}$ die Behauptung.
-\item $(ii)\implies(i)$:\par
-Wir zeigen zunächst, dass der von den Inklusion $C_*^{\Q}(G)\xhookrightarrow{}C_*^{\R}(G)$ induzierte $\R$-Ketten\-morphismus $\R\otimes_{\Q}C_*^{\Q}(G)\to C_*^{\R}(G)$ für alle $n\in\N$ einen Isomorphismus $\R\otimes_{\Q}H_n(G,\Q)\to H_n(G,\R)$ induziert. Wir betrachten hierfür zunächst die exakte Sequenz
+\item Wir zeigen jetzt, dass 
+\begin{align*}
+\R\otimes_{\Q}H_*(G,\Q)&\to H_*(G,\R)\\
+r\otimes [x] &\mapsto r[x]
+\end{align*} 
+eine Isomorphismus ist. Wir betrachten hierfür zunächst die exakte Sequenz
 \begin{center}
 \begin{tikzpicture}
   \matrix (m) [matrix of math nodes,row sep=3em,column sep=4em,minimum width=2em]
@@ -605,8 +610,17 @@ Da $\R$ flach über $\Q$ ist, ist
     \draw[->] (m-1-4) -- (m-1-5);
 \end{tikzpicture}
 \end{center}
-wieder exakt. Hieraus folgt, dass $\R\otimes_{\Q}\ker\partial_n^{\Q}=\ker\partial_n^{\R}$ und $\R\otimes_{\Q}\img\partial_n^{\Q}=\img\partial_n^{\R}$ gilt.\par
-Wir erhalten hieraus folgendes kommutatives Diagramm mit exakten Zeilen (wobei der rechte Morphimus $\R\otimes_{\Q}H_n(G,\Q)\to H_n(G,\R)$ der von $\R\otimes_{\Q}C_*^{\Q}(G)\to C_*^{\R}(G)$ in der Homologie induzierte Morphismus ist):
+wieder exakt. Hieraus folgt, dass 
+\begin{align*}
+\text{incl}:R\otimes_{\Q}\ker\partial_n^{\Q}&\to\ker\partial_n^{\R}\\
+r\otimes x&\mapsto rx
+\end{align*} und
+\begin{align*}
+\text{incl}:R\otimes_{\Q}\img\partial_n^{\Q}&\to\img\partial_n^{\R}\\
+r\otimes x&\mapsto rx
+\end{align*}
+Isomorphismen sind.\par
+Wir erhalten hieraus folgendes kommutatives Diagramm mit exakten Zeilen:
 \begin{center}
 \begin{tikzpicture}
   \matrix (m) [matrix of math nodes,row sep=3em,column sep=3em,minimum width=1.5em]
@@ -627,35 +641,39 @@ Wir erhalten hieraus folgendes kommutatives Diagramm mit exakten Zeilen (wobei d
     \draw[->] (m-1-4) -- (m-2-4);
 \end{tikzpicture}
 \end{center}
-Mit dem Fünferlemma folgt daraus, dass $\R\otimes_{\Q}H_n(G,\Q)\to H_n(G,\R)$ ein Isomorphismus ist.\par
-Hiermit zeigen wir jetzt, dass $\ker\partial_{q+1}^{\Q}\subset \ker\partial_{q+1}^{\R}$ dicht ist. Sei also $z\in \ker\partial_{q+1}^{\R}$. Aus dem Isomorphismus $\R\otimes_{\Q}H_n(G,\Q)\to H_n(G,\R)$ folgt, dass $b\in C_{q+2}^{\R}(G)$ und $n\in\N,a_1,\ldots,a_n\in\R,z_1,\ldots,z_n\in \ker\partial_{q+1}^{\Q}$ mit 
-\begin{equation*}
-\partial_{q+2}^{\R}(b)+\sum\limits_{i=1}^n\lambda_iz_i=z
-\end{equation*}
-existieren. Wähle nun eine Folge $\bigl(b_j\in C_{q+2}^{\Q}(G)\bigr)$ mit $\lim\limits_{j\to\infty}b_j=b$ und für alle $i\in \{1,\ldots,n\}$ eine Folge $\bigl(\lambda_{i_j}\in\Q\bigr)_{j\in\N}$ mit $\lim\limits_{j\to\infty}\lambda_{i_j}=\lambda_i$.\par
-Definiere dann $z_j:=\partial_{q+2}^{\Q}(b_j)+\sum\limits_{i=1}^n\lambda_{i_j}z_i$. Offenbar gilt dann $z_j\in\ker\partial_{q+1}^{\Q}$ für $j\in\N$. Weiter gilt $\lim\limits_{j\to\infty}\|z-z_j\|_1\leq \lim\limits_{j\to\infty}\|\partial_{q+2}^{\R}(b-b_j)\|_1+\lim\limits_{j\to\infty}\sum\limits_{i=1}^n|\lambda_i-\lambda_{i_j}|\|z_i\|_1\leq (q+3)\lim\limits_{j\to\infty}\|b-b_j\|_1+\sum\limits_{i=1}^n\lim\limits_{j\to\infty}|\lambda_i-\lambda_{i_j}|\|z_i\|_1=0$, d.h. $\lim\limits_{j\to\infty}z_j=z$. Also ist $\ker\partial_{q+1}^{\Q}$ dicht in $\ker\partial_{q+1}^{\R}$.\par
-Nach Voraussetzung ist $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ und somit folgt, dass $\ker \partial_{q+1}^{\Q}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist. Wir können damit also analog zu $(ii)\implies (i)$ aus \cref{satz:UBCandComparisonMap} $q$-$\text{UBC}^{\Q}$ zeigen.
+Mit dem Fünferlemma folgt daraus, dass $\R\otimes_{\Q}H_n(G,\Q)\to H_n(G,\R)$ ein Isomorphismus ist.
 \end{itemize}
-%
-%Nach \cref{lem:CQdenseInCR} ist $C_n^{\Q}(G)\subset C_n^{\R}(G)$ dicht, womit $C_n^{\Q}(G)\subset C_n^{\ell^1}(G)$ und $\img\partial_n^{\Q}\subset \img\partial_n^{\ell^1}$ dicht sind.
-%Somit ist der Beweis von $q\text{-UBC}^{\Q}\implies q\text{-UBC}^{\ell^1}$ und $(ii)\implies (i)$ analog zu \cref{satz:UBCandComparisonMap}.\par
-%Statt $q$-$\text{UBC}^{\Q}\implies\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$ zeigen wir, dass $q$-$\text{UBC}^{\Q}$ sogar impliziert, dass $\ker \partial_{q+1}^{\R}$ dicht ist in $\ker \partial_{q+1}^{\ell^1}$, womit wegen $\ker \partial_{q+1}^{\Q}\subset\ker \partial_{q+1}^{\R}$ die gewünschte Aussage folgt.
 \end{proof}
 \end{satz}
-%\begin{lemma}
-%$\BHom[G]{C_n^{\Q}(G),\Q}$ ist dicht in $\BHom[G]{C_n^{\R}(G),\R}$.
-%\begin{proof}
-%Sei $f\in \BHom[G]{C_n^{\R}(G),\R}$ mit $\|f\|_{\infty}=C$. Wähle für alle $g\in G^n$ eine Folge $a_{g,i}\in \Q$ mit $\lim\limits_{i\to \infty}a_{g,i}=f(g)$, $\lvert a_{g,i}\rvert\leq \lvert f(g)\rvert $ und $\lvert a_{g,i}-f(g)\rvert\leq 2^{-i}$. Sei $f_i$ die $\Q[G]$-lineare Fortsetzung der Abbildung 
-%\begin{align*}
-%G^n&\to \Q\\
-%g&\mapsto a_{g,i}
-%\end{align*}
-%Sei $x=\sum\limits_{g\in G^n}b_g\cdot g\in C_n^{\Q}(G)$ in $\Q[G]$-Basisdarstellung und $\sum\limits_{h\in G}b_{g,h}\cdot h=b_g$ in $\Q$-Basisdarstellung.
-%Dann gilt $\lvert f_i(x)\rvert = \lvert \sum\limits_{g\in G^n} f_i(b_g\cdot g)\rvert=\lvert \sum\limits_{g\in G^n} \left(\sum\limits_{h\in G}b_{g,h}\right)f_i(g)\rvert\leq  \sum\limits_{g\in G^n} \left(\sum\limits_{h\in G}\lvert b_{g,h}\rvert\right)\lvert a_{g,i}\rvert \leq \sum\limits_{(g,h)\in G^n\times G}\lvert b_{g,h}\rvert\lvert f(g)\rvert\leq C\|x\|_1$. Damit folgt, dass alle $f_i$ stetig sind.\par
-%Weiter gilt $\lvert f_i(x)-f(x)\rvert \leq \sum\limits_{(g,h)\in G^n\times G}\lvert b_{g,h}\rvert\lvert f_i(g)-f(g)\rvert\leq 2^{-i}\|x\|_1$, d.h. $\lim\limits_{i\to \infty}f_i=f$ und die Behauptung folgt.
-%\end{proof}
-%\end{lemma}
 
+%TODO Q-UBC zeigen
+Das folgende Resultat, welches den Zusammenhang zwischen UBC und der Vergleichsabbildung darstellt, ist im Wesentlichen \cite[Theorem 2.8]{matsumoto}.
+
+\begin{satz}[UBC, $\text{UBC}^{\ell^1}$ und die Vergleichsabbildung]\label{satz:UBCandComparisonMap}
+Sei $G$ eine Gruppe, $q\in \N$. Folgende Aussagen sind äquivalent:
+\renewcommand{\labelenumi}{(\roman{enumi}) }
+\begin{enumerate}
+\item $G$ erfüllt $q$-UBC
+\item $G$ erfüllt $q$-$\text{UBC}^{\ell^1}$ und $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$
+\item $c^{q+1}:H_b^{q+1}(G,\R)\to H^{q+1}(G,\R)$ ist injektiv
+\end{enumerate}
+\begin{proof}
+$(i)\Longleftrightarrow(ii)$:\par
+Da nach \cref{satz:QFulfillsConditions} die Voraussetzungen von \cref{satz:UBCandDenseQSubcomplexes} erfüllt sind, folgt $(i)\Longleftrightarrow(ii)$ aus \cref{def:UBCforGroups}.\par\noindent
+$(ii)\implies (iii)$:\par
+Sei $f\in \ker \delta_{\R,b}^{q+1}$ mit $c^{q+1}([f])=0$, d.h. es existiert ein $F\in C_{\R}^q(G)$ mit $(-1)^{q+1}\delta_{\R}^q(F)=F\circ \partial_{q+1}^{\R}=f$. Somit ist $f=0$ auf $\ker \partial_{q+1}^{\R}$. Da $f$ stetig ist und $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ liegt, verschwindet die Fortsetzung von $f$ nach $C^{\ell^1}_{q+1}(G)$ sogar auf $\ker \partial_{q+1}^{\ell^1}$ und induziert damit eine beschränkte Abbildung $\overline{f}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \R$. Genauso induziert $\partial_{q+1}^{\ell^1}$ eine beschränkte und bijektive Abbildung $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$. Aus $q$-$\text{UBC}^{\ell^1}$ folgt, dass $\|\overline{\partial_{q+1}^{\ell^1}}^{-1}(x)\|_1\leq K\|x\|_1$ gilt, d.h. die Umkehrabbildung ist stetig. Mit dem Satz von Hahn-Banach können wir $\overline{f}\circ \overline{\partial_{q+1}^{\ell^1}}^{-1}:\img \partial_{q+1}^{\ell^1}\to \R$ fortsetzen zu einem stetigen, linearen Funktional $\overline{F_b}:C_q^{\ell^1}(G)\to \R$. Dessen Einschränkung $F_b:C^{\R}_q(G)\to \R$ erfüllt $(-1)^{q+1}\delta_{\R,b}^q(F_b)=F_b\circ \partial_{q+1}^{\R}=f$ nach Konstruktion, d.h. $[f]=0$ in $H_b^{q+1}(G,\R)$, womit $c^{q+1}$ injektiv ist.\par\noindent
+$(iii)\implies (ii)$:
+\begin{itemize}
+\item Wir zeigen zuerst $q$-$\text{UBC}^{\ell^1}$.\par
+Dazu zeigen wir zunächst, dass $\img \partial_{q+1}^{\ell^1}$ abgeschlossen in $C_{q+1}^{\ell^1}(G)$, d.h. ein Banachraum ist. Nach dem Satz vom abgeschlossenen Bild ist dies genau dann der Fall, wenn der duale Operator ein abgeschlossenes Bild besitzt. Da wir aber für alle $n\in \N$ $\BHom[\R{[}G{]}]{C_n^{\ell^1}(G),\R}$ mit $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}$ identifizieren können (da $\R$ vollständig ist), ist dies äquivalent dazu, dass $\delta_{\R,b}^q$ abgeschlossenes Bild besitzt. Sei also $\bigl(f_i\in \img \delta_{\R,b}^q\bigr)_{i\in \N}$ eine konvergente Folge mit Grenzwert $f$ (der offenbar in $\ker \delta_{\R,b}^{q+1}$ liegen muss, da $\ker \delta_{\R,b}^{q+1}$ abgeschlossen ist). Dann ist $f=0$ auf $\ker \partial_{q+1}^{\R}$ und induziert somit eine Abbildung $\overline{f}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \R$. Weiter erhalten wir aus $\partial_{q+1}^{\R}$ einen Isomorphismus (im Sinne linearer Abbildungen, i.A. nicht im Sinne stetiger, linearer Abbildungen) $\overline{\partial_{q+1}^{\R}}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \img \partial_{q+1}^{\R}$. Es ist also $\overline{f}\circ\overline{\partial_{q+1}^{\R}}^{-1}:\img \partial_{q+1}^{\R}\to \R$ eine lineare, aber nicht notwendigerweise stetige Abbildung.
+Wir setzen diese zu einer linearen Abbildung $F:C_q^{\R}(G)\to \R$ fort.
+Dann gilt $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt somit, dass $f\in \img \delta_{\R,b}^q$, also ist $\img \partial_{q+1}^{\ell^1}$ abgeschlossen.\par
+Daraus folgt aus dem Prinzip der offenen Abbildung, dass $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$ ein Isomorphismus (hier im Sinne stetiger, linearer Abbildungen) ist. Es sei $\|\cdot\|_{\text{quot}}$ die Quotientennorm auf $\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}$. Dann existiert damit ein $K>0$, sodass für alle $z\in \img \partial_{q+1}^{\ell^1}$ ein $c\in C_{q+1}^{\ell^1}(G)$ existiert mit $\partial_{q+1}^{\R}(c)=z$, $2\|[c]\|_{\text{quot}}\leq K\|z\|_1$ und $\|c\|_1\leq 2\|[c]\|_{\text{quot}}$, womit $q$-$\text{UBC}^{\ell^1}$ erfüllt ist.\par
+\item Wir zeigen nun, dass $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist.\par
+Angenommen, es existiert $x\in \ker \partial_{q+1}^{\ell^1}\backslash\overline{\ker \partial_{q+1}^{\R}}$. Dann existiert nach Hahn-Banach ein stetiges Funktional $\overline{f}:C_{q+1}^{\ell^1}(G)\to \R$ mit $\overline{f}=0$ auf $\overline{\ker \partial_{q+1}^{\R}}$ und $\overline{f}(x)=1$. Außerdem verschwindet die aus $\overline{f}$ durch Einschränken auf $C_{q+1}^{\R}(G)$ gewonnene Abbildung $f:C_{q+1}^{\R}(G)\to \R$ auf $\ker \partial_{q+1}^{\R}$. Analog zu vorherigem Teil konstruieren wir daraus eine (nicht notwendigerweise stetige) lineare Abbildung $F:C_q^{\R}(G)\to \R$ mit $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt daraus, dass ein stetiges, lineares Funktional $F_b:C_q^{\R}(G)\to \R$ existiert mit $F_b\circ \partial_{q+1}^{\R}=f$. Aus der Eindeutigkeit der Fortsetzung auf die Vervollständigung folgt $\overline{F_b}\circ \partial_{q+1}^{\ell^1}=\overline{f}$. Dies ist aber ein Widerspruch, denn $1=\overline{f}(x)=\overline{F_b}\circ \partial_{q+1}^{\ell^1}(x)=0$. Damit folgt, dass $\ker \partial_{q+1}^{\ell^1}=\overline{\ker \partial_{q+1}^{\R}}$, d.h. $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$.
+\end{itemize}
+\end{proof}
+\end{satz}
 
 \section{Anwendung der Resultate im Experiment}
 Wir können die in \cref{sec:UBCandComparisonMap} bewiesenen Aussagen nutzen, um experimentell die Trivialität höherer Grade der beschränkten Kohomologie von Gruppen zu prüfen. Im folgenden schränken wir uns dabei auf $H_b^4(F_2,\R)$ ein, da dies der niedrigste Grad der beschränkten Kohomologie der freien Gruppe von Rang 2 ist, von dem nicht bekannt ist, ob er verschwindet.
