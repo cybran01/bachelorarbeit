@@ -4,6 +4,7 @@
 \usepackage{pdfpages}
 \usepackage{csquotes}
 \usepackage{listings}
+\usepackage{makecell}
 \lstset{language=C++,
                 basicstyle=\ttfamily,
                 keywordstyle=\color{blue}\ttfamily,
@@ -543,7 +544,7 @@ Sei $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ ein dichter $\Q$-Unterkettenkomplex e
 r\otimes [x] &\mapsto r[x]
 \end{align*}
 surjektiv ist. Dann sind für $q\in\N$ äquivalent:
-\renewcommand{\labelenumi}{(\roman{enumi})}%TODO WHY DIS NOT WORKING
+\renewcommand{\labelenumi}{(\roman{enumi})}
 \begin{enumerate}
 \item $\bigl(D_*^{\R},\partial_*^{\R}\bigr)\supset \bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ erfüllt $q$-$\text{UBC}^{\Q}$
 \item $\bigl(D_*^{\R},\partial_*^{\R}\bigr)\subset\bigl(\overline{D_*^{\R}},\overline{\partial_*^{\R}}\bigr)$ erfüllt $q$-$\overline{\text{UBC}}$ und $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \overline{\partial_{q+1}^{\R}}$
@@ -737,7 +738,64 @@ Da diese Klasse ebenfalls eine Schablone ist, können auch hier eigene Datentype
 \end{itemize}
 Beim Ausführen des Programms müssen die gewünschte Größe des zu generierenden Datensatzes und die obigen Parameter eingegeben werden. Danach wird wiederholt die Methode \lstinline|nextElement(int,int,int,int,int)| aufgerufen und aus dem Ergebnis ein Tripel wie in \cref{bem:strategy} generiert, bis der Datensatz die gewünschte Größe erreicht hat. Der Datensatz wird als ,,experiment.csv'' im CSV-Format mit Semikolon als Trennungszeichen gespeichert.
 \chapter{Auswertung des Experiments}
-%TODO beschreiben des Datensatzes, Demonstration dass sich alle besonderen Elemente umschreiben lassen
+Zum Abschluss dieser Arbeit sollen die generierten Daten ausgewertet werden.\par
+Für alle Elemente $x$ des Datensatzes bis auf $5$ Ausnahmen gilt
+$\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}\leq 1$. Diese Ausnahmen sind folgende:\par
+\renewcommand{\arraystretch}{2}
+\begin{center}
+\begin{tabular}{l|l|l}
+$x$ & $\partial_4^{\Q}(x)$ & $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$\\ \hline\hline
+$+4e\cdot[e | e | e | e]-6e\cdot[e | e | e | b^{4}a^{-2}]$ & $-2e\cdot [e | e | e]$ & 5 \\\hline
+$\begin{aligned}
+&-3a^{-2}\cdot[e | e | e | a^{-1}b^{-4}]\\&+2a^{-2}\cdot[e | e | e | b^4a^{-2}b^3a^4]
+\end{aligned}$ & $-1a^{-2}\cdot [e| e | e]$ & 5\\\hline
+$-3e\cdot[e | e | e | a^{-3} b^{-2}]+6e\cdot[e | e | e | a^3 b^4]$ & $+3e\cdot [e | e | e]$ & 3\\\hline
+$\begin{aligned}
+&+3e\cdot[e | e | e | a^{-2} b^{-2} a]-3e\cdot[e | e | e | b^3]\\&+6a^{ -3}b\cdot[a^{-2} | e | b^4 a^{-4} b^3 a^{-1} | e]  
+\end{aligned}$
+&  $+6a^{-3} b a^{-1}\cdot [e | b^4 a^{-4} b^3 a^{-1} | e]$ & 2\\\hline
+$\begin{aligned}
+&+3e\cdot[e | e | e | b^4 a^{-1} b a^{-3}]-4e\cdot[e | e | e | a^2]\\&-1b^{-2} a^4 b^3\cdot[e | a | b^4 | a b^{-4} a^{-2}]
+\end{aligned}$ & 
+$\begin{aligned}
+&-1e\cdot[e | e | e]\\&-1b^{-2} a^4 b^3\cdot[e | a | b^4]\\&+1b^{-2} a^4 b^3\cdot[e | a | b^4 a b^{-4} a^{-2}]\\&-1b^{-2} a^4 b^3\cdot[e | a b^4 | a b^{-4} a^{-2}]
+\end{aligned}$ & 2
+\end{tabular}
+\end{center}
+
+Durch ,,Korrektur'' mit Elementen aus $\ker\partial_4^{\Q}$ wie in \cref{lem:AltQUBC} können jedoch die Quotienten aller Elemente dieser Liste auf $\leq 1$ verringert werden.\par
+Beispielweise gilt für das erste Element $x:=+4e\cdot[e | e | e | e]-6e\cdot[e | e | e | b^{4}a^{-2}]$ der Liste wegen $d:=+1e\cdot[e | e | e | e]-1e\cdot[e | e | e | b^{4}a^{-2}]\in \ker\partial_4^{\Q}$, dass $\partial_4^{\Q}(x-4d)=\partial_4^{\Q}\bigl(-2e\cdot[e | e | e | b^{4}a^{-2}]\bigr)=-2e\cdot [e | e | e]=\partial_4^{\Q}(x)$, also insbesondere $\frac{\|x-4d\|_1}{\|\partial_4^{\Q}(x)\|_1}=1$. Analog kann auch für die anderen Elemente verfahren werden.\par 
+\begin{definition}
+Sei $G$ eine Gruppe. Wir definieren für $n\in\N$ die $\Q$-linearen Abbildungen
+\begin{align*}
+f_n:C_n^{\Q}(G)&\to \Q\\
+g\cdot[g_1|\ldots|g_n]&\mapsto 1
+\end{align*}
+\end{definition}
+
+\begin{lemma}\label{lem:MapsCommute}
+Sei $n\in\N$ gerade. Dann gilt $f_{n-1}\circ\partial_n^{\Q}=f_n$.
+\begin{proof}
+Es genügt, die Behauptung auf der $\Q$-Basis von $C_n^{\Q}(G)$ aus \cref{bem:RBasisOfBarRes} zu zeigen. Es gilt $f_{n-1}\circ\partial_n^{\Q}(g\cdot[g_1|\ldots|g_n])=\sum\limits_{i=0}^n(-1)^i=1=f_n(g\cdot[g_1|\ldots|g_n])$, womit die Behauptung folgt.
+\end{proof}
+\end{lemma}
+
+\begin{definition}[Länge von Elementen der Bar-Auflösung]
+Für $n\in\N$ und eine Gruppe $G$ sei
+\begin{align*}
+L:C_n^{\Q}(G)&\to \N\\
+x=\sum\limits_{i=1}^na_ix_i&\mapsto n
+\end{align*}
+wobei $x=\sum\limits_{i=1}^na_ix_i$ in $\Q$-Basisdarstellung der Basis aus \cref{bem:RBasisOfBarRes} sei. Hierbei benutzen wir die Konvention, dass für die leere Summe (d.h. für das $0$-Element) $n=0$ ist.
+\end{definition}
+
+\begin{lemma}
+Für die Konstante $K$ aus \cref{lem:AltQUBC} gilt $K\geq 1$.
+\begin{proof}
+Für $x=e\cdot[e|e|e|e]$ gilt $\|x\|_1=\|\partial_4^{\Q}(x)\|_1$. Sei nun $d\in\ker\partial_4^{\Q}$. Dann gilt nach \cref{lem:MapsCommute} $f_4(d)=0$, also $\|x\|_1=|f_4(x)|=|f_4(x+d)|\leq \|x+d\|_1$. Somit folgt $K\geq 1$. 
+\end{proof}
+\end{lemma}
+%TODO für (f-g) zeigen
 \nocite{loeha}
 \nocite{loehb}
 \nocite{frigerio}
