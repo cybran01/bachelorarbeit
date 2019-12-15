@@ -542,7 +542,7 @@ Sei $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ ein dichter $\Q$-Unterkettenkomplex e
 \R\otimes_{\Q}H_*(D_*^{\Q})&\to H_*(D_*^{\R})\\
 r\otimes [x] &\mapsto r[x]
 \end{align*}
-ein Isomorphismus ist. Dann sind für $q\in\N$ äquivalent:
+surjektiv ist. Dann sind für $q\in\N$ äquivalent:
 \renewcommand{\labelenumi}{(\roman{enumi})}%TODO WHY DIS NOT WORKING
 \begin{enumerate}
 \item $\bigl(D_*^{\R},\partial_*^{\R}\bigr)\supset \bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ erfüllt $q$-$\text{UBC}^{\Q}$
@@ -558,7 +558,7 @@ Nach $q$-$\UBC^{\Q}$ existieren nun $c_i\in D_{q+1}^{\Q}$ mit $\partial_{q+1}^{\
 Sei $z\in \ker \overline{\partial_{q+1}^{\R}}$ und sei $\bigl(z_i\in D_{q+1}^{\Q}\bigr)_{i\in \N}$ eine gegen $z$ konvergente Folge. Wähle mit $q$-$\UBC^{\Q}$ Elemente $\bigl(d_i\in D_{q+1}^{\Q}\bigr)_{i\in \N}$ mit $\partial_{q+1}^{\Q}(d_i)=-\partial_{q+1}^{\Q}(z_i)$ und $\|d_i\|\leq K\|\partial_{q+1}^{\Q}(z_i)\|$. Offenbar gilt $z_i+d_i\in \ker \partial_{q+1}^{\Q}$. Weiter gilt $\|z_i+d_i-z\|\leq \|z_i-z\|_1+\|d_i\|\leq\|z_i-z\|+K\|\partial_{q+1}^{\Q}(z_i)\|$. Da $\|\partial_{q+1}^{\Q}(z_i)\|=\|\partial_{q+1}^{\Q}(z_i-z)\|\leq (q+2)\|z_i-z\|$ und $\|z_i-z\|$ nach Definition für $i\to \infty$ gegen $0$ konvergiert, konvergiert $z_i+d_i$ gegen $z$, d.h. $\ker \partial_{q+1}^{\Q}$ ist dicht in $\ker \overline{\partial_{q+1}^{\R}}$. Wegen $\ker \partial_{q+1}^{\Q}\subset\ker \partial_{q+1}^{\R}$ ist damit $\ker \partial_{q+1}^{\R}$ dicht in $\ker \overline{\partial_{q+1}^{\R}}$.
 \end{itemize}
 $(ii)\implies(i)$:\par
-Wir zeigen zunächst, dass $\ker\partial_{q+1}^{\Q}\subset \ker\partial_{q+1}^{\R}$ dicht ist. Sei also $z\in \ker\partial_{q+1}^{\R}$. Aus dem Isomorphismus $\R\otimes_{\Q}H_*(D_*^{\Q})\to H_*(D_*^{\R})$ folgt, dass $b\in D_{q+2}^{\R}$ und $n\in\N,a_1,\ldots,a_n\in\R,z_1,\ldots,z_n\in \ker\partial_{q+1}^{\Q}$ mit 
+Wir zeigen zunächst, dass $\ker\partial_{q+1}^{\Q}\subset \ker\partial_{q+1}^{\R}$ dicht ist. Sei also $z\in \ker\partial_{q+1}^{\R}$. Aus der Surjektivität von $\R\otimes_{\Q}H_*(D_*^{\Q})\to H_*(D_*^{\R})$ folgt, dass $b\in D_{q+2}^{\R}$ und $n\in\N,a_1,\ldots,a_n\in\R,z_1,\ldots,z_n\in \ker\partial_{q+1}^{\Q}$ mit 
 \begin{equation*}
 \partial_{q+2}^{\R}(b)+\sum\limits_{i=1}^n\lambda_iz_i=z
 \end{equation*}
@@ -576,7 +576,7 @@ Dann gilt, dass $\bigl(C_*^{\Q}(G),\partial_*^{\Q}(G)\bigr)\subset (C_*^{\R}(G),
 \R\otimes_{\Q}H_*(G,\Q)&\to H_*(G,\R)\\
 r\otimes [x] &\mapsto r[x]
 \end{align*}
-ein Isomorphismus ist.
+ein Isomorphismus (und damit insbesondere surjektiv) ist.
 \begin{proof}\hfill
 \begin{itemize}
 \item Wir zeigen zuerst, dass $\bigl(C_*^{\Q}(G),\partial_*^{\Q}(G)\bigr)\subset (C_*^{\R}(G),\partial_*^{\R}(G)\bigr)$ dicht ist.\par
@@ -612,11 +612,11 @@ Da $\R$ flach über $\Q$ ist, ist
 \end{center}
 wieder exakt. Hieraus folgt, dass 
 \begin{align*}
-\text{incl}:R\otimes_{\Q}\ker\partial_n^{\Q}&\to\ker\partial_n^{\R}\\
+\text{incl}:\R\otimes_{\Q}\ker\partial_n^{\Q}&\to\ker\partial_n^{\R}\\
 r\otimes x&\mapsto rx
 \end{align*} und
 \begin{align*}
-\text{incl}:R\otimes_{\Q}\img\partial_n^{\Q}&\to\img\partial_n^{\R}\\
+\text{incl}:\R\otimes_{\Q}\img\partial_n^{\Q}&\to\img\partial_n^{\R}\\
 r\otimes x&\mapsto rx
 \end{align*}
 Isomorphismen sind.\par
@@ -646,23 +646,25 @@ Mit dem Fünferlemma folgt daraus, dass $\R\otimes_{\Q}H_n(G,\Q)\to H_n(G,\R)$ e
 \end{proof}
 \end{satz}
 
-%TODO Q-UBC zeigen
 Das folgende Resultat, welches den Zusammenhang zwischen UBC und der Vergleichsabbildung darstellt, ist im Wesentlichen \cite[Theorem 2.8]{matsumoto}.
 
-\begin{satz}[UBC, $\text{UBC}^{\ell^1}$ und die Vergleichsabbildung]\label{satz:UBCandComparisonMap}
+\begin{satz}[UBC, $\UBC^{\Q}$, $\UBC^{\ell^1}$ und die Vergleichsabbildung]\label{satz:UBCandComparisonMap}
 Sei $G$ eine Gruppe, $q\in \N$. Folgende Aussagen sind äquivalent:
 \renewcommand{\labelenumi}{(\roman{enumi}) }
 \begin{enumerate}
+\item $G$ erfüllt $q$-$\UBC^{\Q}$
 \item $G$ erfüllt $q$-UBC
 \item $G$ erfüllt $q$-$\text{UBC}^{\ell^1}$ und $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$
 \item $c^{q+1}:H_b^{q+1}(G,\R)\to H^{q+1}(G,\R)$ ist injektiv
 \end{enumerate}
 \begin{proof}
-$(i)\Longleftrightarrow(ii)$:\par
-Da nach \cref{satz:QFulfillsConditions} die Voraussetzungen von \cref{satz:UBCandDenseQSubcomplexes} erfüllt sind, folgt $(i)\Longleftrightarrow(ii)$ aus \cref{def:UBCforGroups}.\par\noindent
-$(ii)\implies (iii)$:\par
+$(i)\Longleftrightarrow(iii)$:\par
+Da nach \cref{satz:QFulfillsConditions} die Voraussetzungen von \cref{satz:UBCandDenseQSubcomplexes} erfüllt sind, folgt $(i)\Longleftrightarrow(iii)$ aus \cref{def:UBCforGroups}.\par\noindent
+$(ii)\Longleftrightarrow(iii)$:\par
+Offenbar erfüllt die Inklusion $\bigl(C_*^{\R}(G),\partial_*^{\R}(G)\bigr)\subset (C_*^{\R}(G),\partial_*^{\R}(G)\bigr)$ die Voraussetzungen von \cref{satz:UBCandDenseQSubcomplexes}, womit die Behauptung wieder aus \cref{def:UBCforGroups} folgt.\par\noindent
+$(iii)\implies (iv)$:\par
 Sei $f\in \ker \delta_{\R,b}^{q+1}$ mit $c^{q+1}([f])=0$, d.h. es existiert ein $F\in C_{\R}^q(G)$ mit $(-1)^{q+1}\delta_{\R}^q(F)=F\circ \partial_{q+1}^{\R}=f$. Somit ist $f=0$ auf $\ker \partial_{q+1}^{\R}$. Da $f$ stetig ist und $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ liegt, verschwindet die Fortsetzung von $f$ nach $C^{\ell^1}_{q+1}(G)$ sogar auf $\ker \partial_{q+1}^{\ell^1}$ und induziert damit eine beschränkte Abbildung $\overline{f}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \R$. Genauso induziert $\partial_{q+1}^{\ell^1}$ eine beschränkte und bijektive Abbildung $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$. Aus $q$-$\text{UBC}^{\ell^1}$ folgt, dass $\|\overline{\partial_{q+1}^{\ell^1}}^{-1}(x)\|_1\leq K\|x\|_1$ gilt, d.h. die Umkehrabbildung ist stetig. Mit dem Satz von Hahn-Banach können wir $\overline{f}\circ \overline{\partial_{q+1}^{\ell^1}}^{-1}:\img \partial_{q+1}^{\ell^1}\to \R$ fortsetzen zu einem stetigen, linearen Funktional $\overline{F_b}:C_q^{\ell^1}(G)\to \R$. Dessen Einschränkung $F_b:C^{\R}_q(G)\to \R$ erfüllt $(-1)^{q+1}\delta_{\R,b}^q(F_b)=F_b\circ \partial_{q+1}^{\R}=f$ nach Konstruktion, d.h. $[f]=0$ in $H_b^{q+1}(G,\R)$, womit $c^{q+1}$ injektiv ist.\par\noindent
-$(iii)\implies (ii)$:
+$(iv)\implies (iii)$:
 \begin{itemize}
 \item Wir zeigen zuerst $q$-$\text{UBC}^{\ell^1}$.\par
 Dazu zeigen wir zunächst, dass $\img \partial_{q+1}^{\ell^1}$ abgeschlossen in $C_{q+1}^{\ell^1}(G)$, d.h. ein Banachraum ist. Nach dem Satz vom abgeschlossenen Bild ist dies genau dann der Fall, wenn der duale Operator ein abgeschlossenes Bild besitzt. Da wir aber für alle $n\in \N$ $\BHom[\R{[}G{]}]{C_n^{\ell^1}(G),\R}$ mit $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}$ identifizieren können (da $\R$ vollständig ist), ist dies äquivalent dazu, dass $\delta_{\R,b}^q$ abgeschlossenes Bild besitzt. Sei also $\bigl(f_i\in \img \delta_{\R,b}^q\bigr)_{i\in \N}$ eine konvergente Folge mit Grenzwert $f$ (der offenbar in $\ker \delta_{\R,b}^{q+1}$ liegen muss, da $\ker \delta_{\R,b}^{q+1}$ abgeschlossen ist). Dann ist $f=0$ auf $\ker \partial_{q+1}^{\R}$ und induziert somit eine Abbildung $\overline{f}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \R$. Weiter erhalten wir aus $\partial_{q+1}^{\R}$ einen Isomorphismus (im Sinne linearer Abbildungen, i.A. nicht im Sinne stetiger, linearer Abbildungen) $\overline{\partial_{q+1}^{\R}}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \img \partial_{q+1}^{\R}$. Es ist also $\overline{f}\circ\overline{\partial_{q+1}^{\R}}^{-1}:\img \partial_{q+1}^{\R}\to \R$ eine lineare, aber nicht notwendigerweise stetige Abbildung.
@@ -680,7 +682,7 @@ Wir können die in \cref{sec:UBCandComparisonMap} bewiesenen Aussagen nutzen, um
 \begin{korollar} 
 Es gilt $H_b^4(F_2,\R)\cong 0$ genau dann, wenn $F_2$ die Eigenschaft $3$-$\text{UBC}^{\Q}$ erfüllt.
 \begin{proof}
-Nach \cref{satz:QUBCandComparisonMap} ist die Eigenschaft $3$-$\text{UBC}^{\Q}$ für $F_2$ äquivalent dazu, dass $F_2$ die Eigenschaft $q$-$\text{UBC}^{\ell^1}$ erfüllt und $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ liegt. Nach \cref{satz:UBCandComparisonMap} ist dies wiederum äquivalent zur Injektivität der Vergleichsabbildung $c^4:H_b^4(F_2,\R)\to H^4(F_2,\R)$. Da bekannt ist, dass $H^4(F_2,\R)\cong 0$ gilt, ist dies äquivalent zu $H_b^4(F_2,\R)\cong 0$.
+Nach \cref{satz:UBCandComparisonMap} ist die Eigenschaft $3$-$\text{UBC}^{\Q}$ für $F_2$ äquivalent zur Injektivität der Vergleichsabbildung $c^4:H_b^4(F_2,\R)\to H^4(F_2,\R)$. Da bekannt ist, dass $H^4(F_2,\R)\cong 0$ gilt, ist dies äquivalent zu $H_b^4(F_2,\R)\cong 0$.
 \end{proof}
 \end{korollar}
 Da wir im Experiment nicht direkt Elemente $c\in\img\partial_4^{\Q}$ generieren können, müssen wir die Eigenschaft $3$-$\text{UBC}^{\Q}$ für Elemente $x\in C_4^{\Q}(F_2)$ umformulieren. 
@@ -711,7 +713,7 @@ Eine beispielhafte Implementation des Experiments in der Programmiersprache C++ 
 \par
 In diesem Beispiel wurden, um die Anzahl an Kollisionen zu erhöhen, nur $x\in C_4^{\Q}(F_2)$ mit ganzzahligen Koeffizienten generiert. Dieser Schritt ist auch dadurch gerechtfertigt, dass für jedes Element $x=\sum\limits_{i=1}^na_iz_i\in C_4^{\Q}(F_2)$ mit $a_i=\frac{p_i}{q_i}$ (d.h. $x$ ist in $\Q$-Basisdarstellung) $y:=\text{kgV}(q_1,\ldots,q_n)x$ ganzzahlige Koeffizienten besitzt und $\frac{\|y\|_1}{\|\partial_4^{\Q}(y)\|_1}=\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ erfüllt, d.h. für jedes Element $x\in C_4^{\Q}(F_2)$ ein $y\in C_4(F_2)$ existiert, welches denselben Wert für den Quotienten liefert.\par 
 Um Reproduzierbarbeit zu gewährleisten, wurde der Datensatz mit den im Quelltext angegebenen ,,Default''-Parametern generiert.
-\subsection*{Funktionsweise der Implementation}
+\par
 Die Implementation besteht aus 4 Klassen, die die folgenden Funktionalitäten übernehmen:
 \begin{itemize}
 \item WORD\par
