@@ -20,7 +20,7 @@
 \addbibresource{sources.bib}
 \setmainlanguage{german}
 \usepackage{placeins}
-%\usepackage{float}
+\usepackage{float}
 \usepackage{amsmath}   
 \usepackage{amsthm} 
 \usepackage{mathtools}
@@ -40,6 +40,8 @@
 \ofoot{\pagemark}
 
 \DeclareMathOperator{\img}{im}
+\DeclareMathOperator{\lcm}{lcm}
+
 \newcommand{\UBC}{\text{UBC}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\N}{\mathbb{N}}
@@ -47,7 +49,6 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\K}{\mathbb{K}}
 \newcommand{\Inv}[1]{\text{Inv(}#1\text{)}}
-%\newcommand{\Barf}{\text{Bar}}
 \newcommand{\Hom}[2][]{\text{Hom}%
 \ifthenelse{\equal{#1}{}}{}{_{#1}}%
 \left(#2\right)}%
@@ -74,11 +75,6 @@
     {\begin{proof}[Sketch of proof]}
     {\end{proof}}
 
-%  \author{Simon~Lang (\textsf{simon1.lang@uni-regensburg.de})}
-%  \date{02.01.2020}
-%  \title{Die Eigenschaft UBC auf freien Gruppen}
-%%  \subtitle{Subtitle}
-
 \begin{document}
 \pagenumbering{gobble}
 \includepdf{cover.pdf}
@@ -94,7 +90,7 @@ H^q(F_n,\R)\cong
 \end{equation*}
 Für den funktionalanalytischen Zwilling der Gruppenkohomologie, der beschränkten Kohomologie von Gruppen $H_b^*(G,\R)$, gilt dies jedoch nicht. Obwohl sich diese in niedrigen Graden sehr einfach bestimmen lässt und sogar unabhängig von der Gruppe $G$ ist (siehe \cref{sec:BoundedCohomInLowDeg}), ist sie bereits für $F_2$ für $q\geq 4$ unbekannt. \par
 Für $q=2$ wurde von \autocite{mitsumatsu} und für $q=3$ wurde von \autocite{soma} gezeigt, dass $\dim_{\R} H_b^q(G,\R)=\infty$ gilt. Insbesondere demonstriert dies, dass beschränkte Kohomologie von Gruppen i.A. nichttrivial ist. Dies ist nicht offensichtlich, da sie nach \cite{gromov} für mittelbare Gruppen für $q>0$ verschwindet.\par
-In dieser Arbeit werden zuerst die grundlegenden Begriffe für das  Setting von (Ko)Homologie definiert. Gruppenkohomologie und beschränkte Kohomologie von Gruppen werden anschließend über die Bar-Auflösung konstruiert.\par
+In dieser Arbeit werden zuerst die grundlegenden Begriffe für das Setting von (Ko)Homologie definiert. Gruppenkohomologie und beschränkte Kohomologie von Gruppen werden anschließend über die Bar-Auflösung konstruiert.\par
 Basierend auf \cite[Theorem 2.8]{matsumoto} wird mithilfe der ,,Uniform Boundary Condition'' (UBC) eine äquivalente Charakterisierung der Trivialität von $H_b^4(F_2,\R)$ bewiesen, welche einen experimentellen Zugang ermöglicht.\par
 Zuletzt wird eine beispielhafte Implementation des Experiments in der Programmiersprache C++ gegeben und ein generierter Datensatz ausgewertet.
 \end{abstract}
@@ -128,7 +124,7 @@ Da wir uns meist nur für die Ringstruktur interessieren, sprechen wir vom Grupp
 \end{definition}
 
 \begin{definition}[ganzzahliger Gruppenring]
-Wir konstruieren im folgenden den Gruppenring $\Z[G]$. Für allgemeine Ringe verläuft die Konstruktion analog.\par
+Wir konstruieren im Folgenden den Gruppenring $\Z[G]$. Für allgemeine Ringe verläuft die Konstruktion analog.\par
 Sei $G$ eine Gruppe. Der (integrale) Gruppenring $\Z[G]$ von $G$ ist definiert wie folgt:\par
 Die zugrundeliegende additive Gruppe ist die freie abelsche Gruppe $\bigoplus\limits_G \Z$, wobei wir $G$ als die kanonische Basis auffassen. Somit können wir $x\in \Z[G]$ als $x=\sum\limits_{g\in G}a_g\cdot g$ mit eindeutigen Koeffizenten $a_g \in \Z$ auffassen, die für alle bis auf endlich viele $g\in G$ verschwinden. Die Addition ist also gegeben durch die Abbildung 
 \begin{align*}
@@ -168,11 +164,11 @@ Die Kategorie $\prescript{}{R}{\text{Ch}}$ ist die Kategorie der (Links-)$R$-Ket
 \end{tikzpicture}
 \end{center}
 kommutiert. Die Verknüpfung von Morphismen ist durch die gradweise Abbildungsverknüpfung gegeben.\par
-Weiter bezeichnen wir im folgenden Elemente aus $C_n$ als \textit{(n-)Ketten}, Elemente aus $\ker\partial_n$ als \textit{(n-)Zykel} und Elemente aus $\img\partial_{n+1}$ als \textit{(n-)Ränder}.
+Weiter bezeichnen wir im Folgenden Elemente aus $C_n$ als \textit{(n-)Ketten}, Elemente aus $\ker\partial_n$ als \textit{(n-)Zykel} und Elemente aus $\img\partial_{n+1}$ als \textit{(n-)Ränder}.
 \end{definition}
 
 \begin{definition}[Homologie von Kettenkomplex]
-Wir definieren für alle $n\in \Z$ Funktoren $H_n:\prescript{}{R}{\text{Ch}}\to \prescript{}{R}{\text{Mod}}$ wie folgt:
+Sei $R$ ein Ring. Wir definieren für alle $n\in \Z$ Funktoren $H_n:\prescript{}{R}{\text{Ch}}\to \prescript{}{R}{\text{Mod}}$ wie folgt:
 \begin{itemize}
 \item auf Objekten:
 \begin{equation*}
@@ -190,7 +186,7 @@ Aus dieser Konstruktion folgt sofort, dass $H_n$ ein Funktor ist.
 \end{definition}
 
 \begin{definition}[Kategorie der Kokettenkomplexe]\label{def:CatCoChainComplex}
-Sei $R$ ein Ring. Ein \emph{Links-)$R$-Kokettenkomplex} $C^*$ ist ein Paar $\left(\left(C^n \right)_{n\in \Z},\bigl(\delta^n:C^n\to C^{n+1}\right)_{n\in \Z}\bigr)$, wobei für alle $n\in \Z$ gelte:
+Sei $R$ ein Ring. Ein \emph{(Links-)$R$-Kokettenkomplex} $C^*$ ist ein Paar $\left(\left(C^n \right)_{n\in \Z},\bigl(\delta^n:C^n\to C^{n+1}\right)_{n\in \Z}\bigr)$, wobei für alle $n\in \Z$ gelte:
 \begin{itemize}
 \item $C^n$ ist ein $R$-Links-Modul
 \item $\delta^n:C^n\to C^{n+1}$ ist eine $R$-lineare Abbildung
@@ -212,11 +208,11 @@ Die Kategorie $\prescript{}{R}{\text{KoCh}}$ ist die Kategorie der (Links-)$R$-K
 \end{tikzpicture}
 \end{center}
 kommutiert. Die Verknüpfung von Morphismen ist wieder durch die gradweise Abbildungsverknüpfung gegeben.\par
-Weiter bezeichnen wir im folgenden Elemente aus $C^n$ als \textit{(n-)Koketten}, Elemente aus $\ker\delta^n$ als \textit{(n-)Kozykel} und Elemente aus $\img\delta^{n-1}$ als \textit{(n-)Koränder}.
+Weiter bezeichnen wir im Folgenden Elemente aus $C^n$ als \textit{(n-)Koketten}, Elemente aus $\ker\delta^n$ als \textit{(n-)Kozykel} und Elemente aus $\img\delta^{n-1}$ als \textit{(n-)Koränder}.
 \end{definition}
 
 \begin{definition}[Kohomologie von Kokettenkomplex]\label{def:DefCohomCochain}
-Wir definieren für alle $n\in \Z$ Funktoren $H^*:\prescript{}{R}{\text{KoCh}}\to \prescript{}{R}{\text{Mod}}$ wie folgt:
+Sei $R$ ein Ring. Wir definieren für alle $n\in \Z$ Funktoren $H^*:\prescript{}{R}{\text{KoCh}}\to \prescript{}{R}{\text{Mod}}$ wie folgt:
 \begin{itemize}
 \item auf Objekten:
 \begin{equation*}
@@ -232,10 +228,10 @@ eine wohldefinierte, lineare Abbildung. (Dies folgt aus der universellen Eigensc
 \end{itemize}
 Aus dieser Konstruktion folgt sofort, dass $H^n$ ein Funktor ist.
 \end{definition}
-Im folgenden wird häufig der Fall von (Ko)Kettenkomplexen auftreten, die über $\N$ statt $\Z$ indiziert sind. In diesem Fall sind die verbleibenden Indizes mit Nullmoduln und trivialen (Ko)Randoperatoren zu ergänzen. Wir benutzen für Kettenkomplexe und Homologie untere Indices sowie obere Indices für Kokettenkomplexe und Kohomologie.
+Im Folgenden wird häufig der Fall von (Ko)Kettenkomplexen auftreten, die über $\N$ statt $\Z$ indiziert sind. In diesem Fall sind die verbleibenden Indizes mit Nullmoduln und trivialen (Ko)Randoperatoren zu ergänzen. Wir benutzen für Kettenkomplexe und Homologie untere Indizes sowie obere Indizes für Kokettenkomplexe und Kohomologie.
 
 \section{Bar-Auflösung und elementare Eigenschaften}
-Im folgenden sei $G$ eine Gruppe.
+Im Folgenden sei $G$ eine Gruppe.
 Wir definieren nun die Bar-Auflösung $C_*(G)$ der Gruppe $G$. Auf dieser Konstruktion aufbauend werden wir sowohl Gruppenkohomologie als auch beschränkte Kohomologie von Gruppen konstruieren.
 \begin{definition}[Die Bar-Auflösung $C_*(G)$]\label{def:BarRes}
 Für $n\in \N$ definiere
@@ -332,10 +328,10 @@ wobei wir die angegebene Basis erhalten, indem wir die kanonische Basis von $\bi
 \end{satz}
 
 \section{Wechseln der Koeffizienten}
-Wir wollen im folgenden die Koeffizienten der Bar-Auflösung in $\R[G]$ bzw. $\Q[G]$ ändern. 
+Wir wollen im Folgenden die Koeffizienten der Bar-Auflösung in $\R[G]$ bzw. $\Q[G]$ ändern. 
 \begin{definition}[Tensorprodukt Modul und Kettenkomplex]\label{def:TensorModCh}
-Seien $R,S$ Ringe und $M\in \prescript{}{S}{\text{Mod}}_R$, d.h. ein $(S,R)$-Bimodul. Weiter sei $C\in \prescript{}{R}{\text{Ch}}$.
-Das Tensorprodukt $M\otimes_{R}C$ sei definiert als die Anwendung von $M\otimes_{R}(-)$ auf die Moduln und Randoperatoren des Kettenkomplexes. Aus der Funktorialität von $M\otimes_{R}(-):\prescript{}{R}{\text{Mod}}\to \prescript{}{S}{\text{Mod}}$ folgt bereits die Funktorialität $\prescript{}{R}{\text{Ch}}\to \prescript{}{S}{\text{Ch}}$, da das Tensorprodukt Nullabbildungen erhält.
+Seien $R,S$ Ringe und $M\in \prescript{}{S}{\text{Mod}}_R$, d.h. ein $(S,R)$-Bimodul. Weiter sei $C_*\in \prescript{}{R}{\text{Ch}}$.
+Das Tensorprodukt $M\otimes_{R}C_*$ sei definiert als die Anwendung von $M\otimes_{R}(-)$ auf die Moduln und Randoperatoren des Kettenkomplexes $C_*$. Aus der Funktorialität von $M\otimes_{R}(-):\prescript{}{R}{\text{Mod}}\to \prescript{}{S}{\text{Mod}}$ folgt bereits die Funktorialität $\prescript{}{R}{\text{Ch}}\to \prescript{}{S}{\text{Ch}}$, da das Tensorprodukt Nullabbildungen erhält.
 \end{definition}
 
 \begin{bemerkung} Seien $A,B\in \prescript{}{R}{\text{Alg}}$ mit $R$ einem kommutativen Ring. Sei $M\in \prescript{}{A}{\text{Mod}}$ und $N\in\prescript{}{B}{\text{Mod}}$. Dann ist $M\otimes_{R}N$ ein $A\otimes_{R}B$-Modul mit der Skalarmultiplikation
@@ -379,12 +375,11 @@ erhält man, dass die obige Abbildung tatsächlich der kanonische $A$-Algebrenis
 \end{proof}
 \end{satz}
 
-
 \begin{bemerkung} Somit trägt $\R\otimes_{\Z}C_*(G)$ die Struktur eines $\R[G]$-Moduls und $\Q\otimes_{\Z}C_*(G)$ die eines $\Q[G]$-Moduls. Wir bezeichnen ab jetzt den Kettenkomplex $\R\otimes_{\Z}C_*(G)$ mit $C^{\R}_*(G)$ und die Randoperatoren $\R\otimes_{\Z}\partial_*$ dieses Komplexes mit $\partial_*^{\R}$ (für $\Q$ analog).
 \end{bemerkung}
 
 \begin{bemerkung}[Basis von $C_n^{\R}(G)$]\label{bem:RBasisOfBarRes}
-Aus der Argumentation in \cref{satz:ZBasisOfBarRes} folgt bereits, dass die $\Z$-Basis $\{g_0\cdot [g_1|\ldots|g_n]\in C_n^{\R}(G):(g_0,g_1,\ldots,g_n)\in G^{n+1}\}$ von $C_*(G)$ auch eine $\R$-Basis von $C_n^{\R}(G)$ ist. Das analoge Resultat für $C_n^{\Q}(G)$ gilt ebenfalls.
+Aus der Argumentation in \cref{satz:ZBasisOfBarRes} folgt bereits, dass die $\Z$-Basis $\{g_0\cdot [g_1|\ldots|g_n]\in C_n(G):(g_0,g_1,\ldots,g_n)\in G^{n+1}\}\subset C_n(G)$ von $C_n(G)$ auch eine $\R$-Basis von $C_n^{\R}(G)$ ist. Das analoge Resultat für $C_n^{\Q}(G)$ gilt ebenfalls.
 \end{bemerkung}
 
 \section{Definiton und Vergleich von Kohomologie und (Ko)Kettenkomplexen}
@@ -402,7 +397,7 @@ Wir erhalten daraus einen $\R[G]$-Kokettenkomplex \\$\left(\Hom[\R{[}G{]}]{C_*^{
 \delta_{\R}^n:\Hom[\R{[}G{]}]{C_n^{\R}(G),\R}&\to \Hom[\R{[}G{]}]{C_{n+1}^{\R}(G),\R}\\
 g&\mapsto (-1)^{n+1}g\circ \partial_{n+1}^{\R}
 \end{align*}
-Wir bezeichnen $\left(\Hom[\R{[}G{]}]{C_*^{\R}(G),\R},\delta_{\R}^*\right)$ im weiteren abkürzend als $\left(C_{\R}^*(G),\delta_{\R}^*\right)$. Die Kohomologie dieses Komplexes $H^*(G,\R)$ bezeichnen wir im folgenden als \emph{Gruppenkohomologie} von $G$ mit $\R$-Koeffizienten.
+Wir bezeichnen $\left(\Hom[\R{[}G{]}]{C_*^{\R}(G),\R},\delta_{\R}^*\right)$ im weiteren abkürzend als $\left(C_{\R}^*(G),\delta_{\R}^*\right)$. Die Kohomologie dieses Komplexes $H^*(G,\R)$ bezeichnen wir im Folgenden als \emph{Gruppenkohomologie} von $G$ mit $\R$-Koeffizienten.
 \end{definition}
 
 \begin{definition}[$\ell^1$-Norm]
@@ -418,7 +413,7 @@ Offenbar sind die Randoperatoren $\partial_n^{\R}$ bzw. $\partial_n^{\Q}$ beschr
 \end{definition}
 
 \begin{definition}[beschränkte Kohomologie von Gruppen mit $\R$-Koeffizienten]
-Sei $G$ eine Gruppe. Wir bezeichnen im folgenden die Operatornorm auf dem topologischen Dualraum von $\left(C_n^{\R}(G),\|\cdot\|_1\right)$ mit $\|\cdot\|_{\infty}$, d.h. die topologischen Dualräume sind gegeben durch $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}=\{f\in C_{\R}^n(G):\|f\|_{\infty}< \infty\}$.\par
+Sei $G$ eine Gruppe. Wir bezeichnen im Folgenden die Operatornorm auf dem topologischen Dualraum von $\left(C_n^{\R}(G),\|\cdot\|_1\right)$ mit $\|\cdot\|_{\infty}$, d.h. die topologischen Dualräume sind gegeben durch $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}=\{f\in\Hom[\R{[}G{]}]{C_n^{\R}(G),\R}:\|f\|_{\infty}< \infty\}$.\par
 Wir erhalten so analog zu der Konstruktion von Gruppenkohomologie einen Kokettenkomplex $\bigl(\BHom[\R{[}G{]}]{C_*^{\R}(G),\R},\delta_{b,\R}^*\bigr)$ mit beschränkten Korandoperatoren
 \begin{align*}
 \delta_{b,\R}^n:\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}&\to \BHom[\R{[}G{]}]{C_{n+1}^{\R}(G),\R}\\
@@ -442,7 +437,7 @@ Sei $G$ eine Gruppe. Da die Randoperatoren des Komplexes $\bigl(C_*^{\R}(G),\par
     \draw[right hook->] (m-1-2) -- node [right] {incl} (m-2-2);
 \end{tikzpicture}
 \end{center}
-kommutiert, wobei $\partial_n^{\ell^1}$ den fortgesetzten Randoperator bezeichne.
+kommutiert, wobei $\partial_n^{\ell^1}$ den fortgesetzten Randoperator bezeichnet.
 \end{definition}
 
 \begin{bemerkung}[Buchhaltung für die (Ko)Kettenkomplexe]
@@ -472,7 +467,7 @@ in der Kohomologie. Diese Abbildung $c^*$ ist die sogenannte \emph{Vergleichsabb
 \end{definition}
 
 \chapter{Eigenschaften beschränkter Kohomologie von Gruppen}
-Wir wollen folgenden im einige bekannte Resultate über die beschränkte Kohomologie von Gruppen darstellen sowie die Zusammenhänge zwischen den $\text{UBC}$-Eigenschaften und der Vergleichsabbildung wie in \cite[Theorem 2.8]{matsumoto} zeigen, welche fundamental für das Experiment sind.
+Wir wollen im Folgenden einige bekannte Resultate über die beschränkte Kohomologie von Gruppen darstellen sowie die Zusammenhänge zwischen den $\text{UBC}$-Eigenschaften und der Vergleichsabbildung wie in \cite[Theorem 2.8]{matsumoto} zeigen, welche fundamental für das Experiment sind.
 \section{Beschränkte Kohomologie in niedrigen Graden}\label{sec:BoundedCohomInLowDeg}
 \begin{satz}[beschränkte Kohomologie in Grad 0]
 Sei $G$ eine Gruppe. Dann gilt $H_b^0(G,\R)\cong \R$.
@@ -518,7 +513,7 @@ Wir sagen, dass $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-UBC f
 \begin{definition}[Die Eigenschaften $\text{UBC}^{\Q}$ und $\overline{\text{UBC}}$]\label{def:DefUBCProperty}
 Sei $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)$ ein $\Q$-Unter\-kettenkomplex eines normierten $\R$-Kettenkomplexes $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ (d.h. ein Unterkettenkomplex des Kettenkomplexes, den man erhält wenn man die $\R$-Skalarmultiplikation  von $\bigl(D_*^{\R},\partial_*^{\R}\bigr)$ auf $\Q$ einschränkt).\par
 Wir sagen, dass $\bigl(D_*^{\Q},\partial_*^{\Q}\bigr)\subset \bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\text{UBC}^{\Q}$ für ein $q\in \N$ erfüllt, wenn ein $K>0$ existiert, sodass für alle $z\in \img\partial_{q+1}^{\Q}$ ein $c\in D_{q+1}^{\Q}$ mit $\partial_{q+1}^{\Q}(c)=z$ und $\|c\|\leq K\|z\|$ existiert.\par
-Seien $\overline{D_*^{\R}}$ die Vervollständigungen von $D_*^{\R}$ und $\overline{\partial_*^{\R}}:\overline{D_*^{\R}}\to \overline{D_{*-1}^{\R}}$ die stetigen Fortsetzungen der Randoperatoren $\partial_*^{\R}$. Wir sagen, dass $\bigl(\overline{D_*^{\R}},\overline {\partial_*^{\R}}\bigr)\supset \bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\overline{\text{UBC}}$ erfüllt, wenn $\bigl(\overline{D_*^{\R}},\overline {\partial_*^{\R}}\bigr)$ die Eigenschaft UBC erfüllt.
+Seien $\overline{D_*^{\R}}$ die Vervollständigungen von $D_*^{\R}$ und $\overline{\partial_*^{\R}}:\overline{D_*^{\R}}\to \overline{D_{*-1}^{\R}}$ die stetigen Fortsetzungen der Randoperatoren $\partial_*^{\R}$. Wir sagen, dass $\bigl(\overline{D_*^{\R}},\overline {\partial_*^{\R}}\bigr)\supset \bigl(D_*^{\R},\partial_*^{\R}\bigr)$ die Eigenschaft $q$-$\overline{\text{UBC}}$ erfüllt, wenn $\bigl(\overline{D_*^{\R}},\overline {\partial_*^{\R}}\bigr)$ die Eigenschaft $q$-UBC erfüllt.
 \end{definition}
 
 \begin{definition}[Die UBC-Eigenschaften für Gruppen]\label{def:UBCforGroups}
@@ -530,7 +525,7 @@ Weiter erfüllt $G$ die Eigenschaft $q$-$\text{UBC}^{\ell^1}$, wenn $\bigl(C_*^{
 \begin{lemma}[Existenz schnell konvergenter Reihen]\label{lem:FastConvergingSeries}
 Sei $X$ ein normierter Raum und $D\subset X$ eine Untergruppe der Gruppe $(X,+)$, die dicht in $X$ liegt (z.B. ein dichter Unterraum). Dann existiert für alle $z\in X$ und $\epsilon>0$ eine Folge $\bigl(a_i\in D\bigr)_{i\in\N}$ mit $\sum\limits_{i=0}^{\infty}a_i=z$ und $\sum\limits_{i=0}^{\infty}\|a_i\|\leq(1+\epsilon)\|z\|$.
 \begin{proof}
-Offenbar ist die Behauptung für $z=0$ erfüllt, im folgenden sei also $z\neq 0$.\par
+Offenbar ist die Behauptung für $z=0$ erfüllt, im Folgenden sei also $z\neq 0$.\par
 Wähle zunächst eine Folge $\bigl(z_i\in D\bigr)_{i\in\N}$ mit $\lim\limits_{i\to\infty}z_i=z$. Wähle nun eine Teilfolge $\bigl(z_{i_j}\bigr)_{j\in\N}$ mit $\|z_{i_j}-z\|\leq 2^{-j}\frac{\|z\|}{3}\frac{\epsilon}{2}$.\par
 Setze $a_0:=z_{i_0}$ und $a_j:=z_{i_j}-z_{i_{j-1}}$ für $j>0$. Offenbar gilt dann $a_j\in D$ für alle $j\in \N$ und $\sum\limits_{i=0}^{\infty}a_i=z$.\par
 Weiter gilt $\sum\limits_{i=0}^{\infty}\|a_i\|=\|a_0\|+\sum\limits_{i=1}^{\infty}\|a_i\|\leq (1+\epsilon)\|z\|$, denn $\|a_0\|\leq \|z\|+\|z\|\frac{\epsilon}{2}$ und $\|a_i\|\leq 2^{-i}\|z\|\frac{\epsilon}{2}$ für $i>0$ nach Konstruktion.
@@ -613,15 +608,16 @@ Da $\R$ flach über $\Q$ ist, ist
 \end{center}
 wieder exakt. Hieraus folgt, dass 
 \begin{align*}
-\text{incl}:\R\otimes_{\Q}\ker\partial_n^{\Q}&\to\ker\partial_n^{\R}\\
-r\otimes x&\mapsto rx
-\end{align*} und
-\begin{align*}
 \text{incl}:\R\otimes_{\Q}\img\partial_n^{\Q}&\to\img\partial_n^{\R}\\
 r\otimes x&\mapsto rx
 \end{align*}
+und
+\begin{align*}
+\text{incl}:\R\otimes_{\Q}\ker\partial_n^{\Q}&\to\ker\partial_n^{\R}\\
+r\otimes x&\mapsto rx
+\end{align*}
 Isomorphismen sind.\par
-Wir erhalten hieraus folgendes kommutatives Diagramm mit exakten Zeilen:
+Wir erhalten daraus folgendes kommutatives Diagramm mit exakten Zeilen:
 \begin{center}
 \begin{tikzpicture}
   \matrix (m) [matrix of math nodes,row sep=3em,column sep=3em,minimum width=1.5em]
@@ -664,14 +660,14 @@ Da nach \cref{satz:QFulfillsConditions} die Voraussetzungen von \cref{satz:UBCan
 $(ii)\Longleftrightarrow(iii)$:\par
 Offenbar erfüllt die Inklusion $\bigl(C_*^{\R}(G),\partial_*^{\R}(G)\bigr)\subset (C_*^{\R}(G),\partial_*^{\R}(G)\bigr)$ die Voraussetzungen von \cref{satz:UBCandDenseQSubcomplexes}, womit die Behauptung wieder aus \cref{def:UBCforGroups} folgt.\par\noindent
 $(iii)\implies (iv)$:\par
-Sei $f\in \ker \delta_{\R,b}^{q+1}$ mit $c^{q+1}([f])=0$, d.h. es existiert ein $F\in C_{\R}^q(G)$ mit $(-1)^{q+1}\delta_{\R}^q(F)=F\circ \partial_{q+1}^{\R}=f$. Somit ist $f=0$ auf $\ker \partial_{q+1}^{\R}$. Da $f$ stetig ist und $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ liegt, verschwindet die Fortsetzung von $f$ nach $C^{\ell^1}_{q+1}(G)$ sogar auf $\ker \partial_{q+1}^{\ell^1}$ und induziert damit eine beschränkte Abbildung $\overline{f}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \R$. Genauso induziert $\partial_{q+1}^{\ell^1}$ eine beschränkte und bijektive Abbildung $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$. Aus $q$-$\text{UBC}^{\ell^1}$ folgt, dass $\|\overline{\partial_{q+1}^{\ell^1}}^{-1}(x)\|_1\leq K\|x\|_1$ gilt, d.h. die Umkehrabbildung ist stetig. Mit dem Satz von Hahn-Banach können wir $\overline{f}\circ \overline{\partial_{q+1}^{\ell^1}}^{-1}:\img \partial_{q+1}^{\ell^1}\to \R$ fortsetzen zu einem stetigen, linearen Funktional $\overline{F_b}:C_q^{\ell^1}(G)\to \R$. Dessen Einschränkung $F_b:C^{\R}_q(G)\to \R$ erfüllt $(-1)^{q+1}\delta_{\R,b}^q(F_b)=F_b\circ \partial_{q+1}^{\R}=f$ nach Konstruktion, d.h. $[f]=0$ in $H_b^{q+1}(G,\R)$, womit $c^{q+1}$ injektiv ist.\par\noindent
+Sei $f\in \ker \delta_{\R,b}^{q+1}$ mit $c^{q+1}([f])=0$. Dann existiert ein $F\in C_{\R}^q(G)$ mit $(-1)^{q+1}\delta_{\R}^q(F)=F\circ \partial_{q+1}^{\R}=f$ und es folgt $f=0$ auf $\ker \partial_{q+1}^{\R}$. Da $f$ stetig ist und $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ liegt, verschwindet die Fortsetzung von $f$ nach $C^{\ell^1}_{q+1}(G)$ sogar auf $\ker \partial_{q+1}^{\ell^1}$ und induziert damit eine beschränkte Abbildung $\overline{f}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \R$. Genauso induziert $\partial_{q+1}^{\ell^1}$ eine beschränkte und bijektive Abbildung $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$. Aus $q$-$\text{UBC}^{\ell^1}$ folgt, dass $\|\overline{\partial_{q+1}^{\ell^1}}^{-1}(x)\|_1\leq K\|x\|_1$ gilt, d.h. die Umkehrabbildung ist stetig. Mit dem Satz von Hahn-Banach können wir $\overline{f}\circ \overline{\partial_{q+1}^{\ell^1}}^{-1}:\img \partial_{q+1}^{\ell^1}\to \R$ fortsetzen zu einem stetigen, $\R[G]$-linearen Funktional $\overline{F_b}:C_q^{\ell^1}(G)\to \R$. Dessen Einschränkung $F_b:C^{\R}_q(G)\to \R$ erfüllt $(-1)^{q+1}\delta_{\R,b}^q(F_b)=F_b\circ \partial_{q+1}^{\R}=f$ nach Konstruktion, d.h. $[f]=0$ in $H_b^{q+1}(G,\R)$, womit $c^{q+1}$ injektiv ist.\par\noindent
 $(iv)\implies (iii)$:
 \begin{itemize}
 \item Wir zeigen zuerst $q$-$\text{UBC}^{\ell^1}$.\par
-Dazu zeigen wir zunächst, dass $\img \partial_{q+1}^{\ell^1}$ abgeschlossen in $C_{q+1}^{\ell^1}(G)$, d.h. ein Banachraum ist. Nach dem Satz vom abgeschlossenen Bild ist dies genau dann der Fall, wenn der duale Operator ein abgeschlossenes Bild besitzt. Da wir aber für alle $n\in \N$ $\BHom[\R{[}G{]}]{C_n^{\ell^1}(G),\R}$ mit $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}$ identifizieren können (da $\R$ vollständig ist), ist dies äquivalent dazu, dass $\delta_{\R,b}^q$ abgeschlossenes Bild besitzt. Sei also $\bigl(f_i\in \img \delta_{\R,b}^q\bigr)_{i\in \N}$ eine konvergente Folge mit Grenzwert $f$ (der offenbar in $\ker \delta_{\R,b}^{q+1}$ liegen muss, da $\ker \delta_{\R,b}^{q+1}$ abgeschlossen ist). Dann ist $f=0$ auf $\ker \partial_{q+1}^{\R}$ und induziert somit eine Abbildung $\overline{f}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \R$. Weiter erhalten wir aus $\partial_{q+1}^{\R}$ einen Isomorphismus (im Sinne linearer Abbildungen, i.A. nicht im Sinne stetiger, linearer Abbildungen) $\overline{\partial_{q+1}^{\R}}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \img \partial_{q+1}^{\R}$. Es ist also $\overline{f}\circ\overline{\partial_{q+1}^{\R}}^{-1}:\img \partial_{q+1}^{\R}\to \R$ eine lineare, aber nicht notwendigerweise stetige Abbildung.
-Wir setzen diese zu einer linearen Abbildung $F:C_q^{\R}(G)\to \R$ fort.
-Dann gilt $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt somit, dass $f\in \img \delta_{\R,b}^q$, also ist $\img \partial_{q+1}^{\ell^1}$ abgeschlossen.\par
-Daraus folgt aus dem Prinzip der offenen Abbildung, dass $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$ ein Isomorphismus (hier im Sinne stetiger, linearer Abbildungen) ist. Es sei $\|\cdot\|_{\text{quot}}$ die Quotientennorm auf $\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}$. Dann existiert damit ein $K>0$, sodass für alle $z\in \img \partial_{q+1}^{\ell^1}$ ein $c\in C_{q+1}^{\ell^1}(G)$ existiert mit $\partial_{q+1}^{\R}(c)=z$, $2\|[c]\|_{\text{quot}}\leq K\|z\|_1$ und $\|c\|_1\leq 2\|[c]\|_{\text{quot}}$, womit $q$-$\text{UBC}^{\ell^1}$ erfüllt ist.\par
+Dazu zeigen wir zunächst, dass $\img \partial_{q+1}^{\ell^1}$ abgeschlossen in $C_{q+1}^{\ell^1}(G)$, d.h. ein Banachraum ist. Nach dem Satz vom abgeschlossenen Bild ist dies genau dann der Fall, wenn der duale Operator ein abgeschlossenes Bild besitzt. Da wir aber für alle $n\in \N$ $\BHom[\R{[}G{]}]{C_n^{\ell^1}(G),\R}$ mit $\BHom[\R{[}G{]}]{C_n^{\R}(G),\R}$ identifizieren können (da $\R$ vollständig ist), ist dies äquivalent dazu, dass $\img\delta_{\R,b}^q$ abgeschlossen ist. Sei also $\bigl(f_i\in \img \delta_{\R,b}^q\bigr)_{i\in \N}$ eine konvergente Folge mit Grenzwert $f$ (der offenbar in $\ker \delta_{\R,b}^{q+1}$ liegen muss, da $\ker \delta_{\R,b}^{q+1}$ abgeschlossen ist). Dann ist $f=0$ auf $\ker \partial_{q+1}^{\R}$ und induziert somit eine Abbildung $\overline{f}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \R$. Weiter erhalten wir aus $\partial_{q+1}^{\R}$ einen Isomorphismus (im Sinne linearer Abbildungen, i.A. nicht im Sinne stetiger, linearer Abbildungen) $\overline{\partial_{q+1}^{\R}}:\frac{C_{q+1}^{\R}(G)}{\ker \partial_{q+1}^{\R}}\to \img \partial_{q+1}^{\R}$. Es ist also $\overline{f}\circ\overline{\partial_{q+1}^{\R}}^{-1}:\img \partial_{q+1}^{\R}\to \R$ eine $\R[G]$-lineare, aber nicht notwendigerweise stetige Abbildung.
+Wir setzen diese zu einer $\R[G]$-linearen Abbildung $F:C_q^{\R}(G)\to \R$ fort.
+Dann gilt $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt somit $f\in \img \delta_{\R,b}^q$, also ist $\img \partial_{q+1}^{\ell^1}$ abgeschlossen.\par
+Daraus folgt aus dem Prinzip der offenen Abbildung, dass $\overline{\partial_{q+1}^{\ell^1}}:\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}\to \img \partial_{q+1}^{\ell^1}$ ein Isomorphismus (hier im Sinne stetiger, linearer Abbildungen) ist. Es sei $\|\cdot\|_{\text{quot}}$ die Quotientennorm auf $\frac{C_{q+1}^{\ell^1}(G)}{\ker \partial_{q+1}^{\ell^1}}$. Dann existiert somit ein $K>0$, sodass für alle $z\in \img \partial_{q+1}^{\ell^1}$ ein $c\in C_{q+1}^{\ell^1}(G)$ existiert mit $\partial_{q+1}^{\R}(c)=z$, $2\|[c]\|_{\text{quot}}\leq K\|z\|_1$ und $\|c\|_1\leq 2\|[c]\|_{\text{quot}}$, womit $q$-$\text{UBC}^{\ell^1}$ erfüllt ist.\par
 \item Wir zeigen nun, dass $\ker \partial_{q+1}^{\R}$ dicht in $\ker \partial_{q+1}^{\ell^1}$ ist.\par
 Angenommen, es existiert $x\in \ker \partial_{q+1}^{\ell^1}\backslash\overline{\ker \partial_{q+1}^{\R}}$. Dann existiert nach Hahn-Banach ein stetiges Funktional $\overline{f}:C_{q+1}^{\ell^1}(G)\to \R$ mit $\overline{f}=0$ auf $\overline{\ker \partial_{q+1}^{\R}}$ und $\overline{f}(x)=1$. Außerdem verschwindet die aus $\overline{f}$ durch Einschränken auf $C_{q+1}^{\R}(G)$ gewonnene Abbildung $f:C_{q+1}^{\R}(G)\to \R$ auf $\ker \partial_{q+1}^{\R}$. Analog zu vorherigem Teil konstruieren wir daraus eine (nicht notwendigerweise stetige) lineare Abbildung $F:C_q^{\R}(G)\to \R$ mit $F\circ \partial_{q+1}^{\R}=f$, d.h. $f\in \img \delta_{\R}^q$. Aus der Injektivität der Vergleichsabbildung folgt daraus, dass ein stetiges, lineares Funktional $F_b:C_q^{\R}(G)\to \R$ existiert mit $F_b\circ \partial_{q+1}^{\R}=f$. Aus der Eindeutigkeit der Fortsetzung auf die Vervollständigung folgt $\overline{F_b}\circ \partial_{q+1}^{\ell^1}=\overline{f}$. Dies ist aber ein Widerspruch, denn $1=\overline{f}(x)=\overline{F_b}\circ \partial_{q+1}^{\ell^1}(x)=0$. Damit folgt, dass $\ker \partial_{q+1}^{\ell^1}=\overline{\ker \partial_{q+1}^{\R}}$, d.h. $\ker \partial_{q+1}^{\R}$ ist dicht in $\ker \partial_{q+1}^{\ell^1}$.
 \end{itemize}
@@ -679,28 +675,32 @@ Angenommen, es existiert $x\in \ker \partial_{q+1}^{\ell^1}\backslash\overline{\
 \end{satz}
 
 \section{Anwendung der Resultate im Experiment}
-Wir können die in \cref{sec:UBCandComparisonMap} bewiesenen Aussagen nutzen, um experimentell die Trivialität höherer Grade der beschränkten Kohomologie von Gruppen zu prüfen. Im folgenden schränken wir uns dabei auf $H_b^4(F_2,\R)$ ein, da dies der niedrigste Grad der beschränkten Kohomologie der freien Gruppe von Rang 2 ist, von dem nicht bekannt ist, ob er verschwindet.
+Wir können die in \cref{sec:UBCandComparisonMap} bewiesenen Aussagen nutzen, um experimentell die Trivialität höherer Grade der beschränkten Kohomologie von Gruppen zu prüfen. Im Folgenden schränken wir uns dabei auf $H_b^4(F_2,\R)$ ein, da dies der niedrigste Grad der beschränkten Kohomologie der freien Gruppe von Rang 2 ist, von dem nicht bekannt ist, ob er verschwindet.
+
 \begin{korollar} 
 Es gilt $H_b^4(F_2,\R)\cong 0$ genau dann, wenn $F_2$ die Eigenschaft $3$-$\text{UBC}^{\Q}$ erfüllt.
 \begin{proof}
 Nach \cref{satz:UBCandComparisonMap} ist die Eigenschaft $3$-$\text{UBC}^{\Q}$ für $F_2$ äquivalent zur Injektivität der Vergleichsabbildung $c^4:H_b^4(F_2,\R)\to H^4(F_2,\R)$. Da bekannt ist, dass $H^4(F_2,\R)\cong 0$ gilt, ist dies äquivalent zu $H_b^4(F_2,\R)\cong 0$.
 \end{proof}
 \end{korollar}
+
 Da wir im Experiment nicht direkt Elemente $c\in\img\partial_4^{\Q}$ generieren können, müssen wir die Eigenschaft $3$-$\text{UBC}^{\Q}$ für Elemente $x\in C_4^{\Q}(F_2)$ umformulieren. 
 \begin{lemma}\label{lem:AltQUBC}
-Die Eigenschaft $3$-$\text{UBC}^{\Q}$ ist äquivalent zu folgender Eigenschaft:
-Es existiert ein $K>0$, sodass für alle $x\in C_4^{\Q}(F_2)$ gilt, dass 
+Sei $q\in\N$ und $G$ eine Gruppe.
+Die Eigenschaft $q$-$\UBC^{\Q}$ für $G$ ist äquivalent zu folgender Eigenschaft:
+Es existiert ein $K>0$, sodass für alle $x\in C_{q+1}^{\Q}(G)$ gilt, dass 
 \begin{equation*}
-\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq K\|\partial_4^{\Q}(x)\|_1
+\inf\limits_{c\in\ker\partial_{q+1}^{\Q}}\|x+c\|_1\leq K\|\partial_{q+1}^{\Q}(x)\|_1
 \end{equation*}
 erfüllt ist.
 \begin{proof}
-Wir zeigen zuerst, dass die gewünschte Eigenschaft aus $3$-$\text{UBC}^{\Q}$ folgt.\par
-Sei $x\in C_4^{\Q}(F_2)$. Dann existiert nach $3$-$\text{UBC}^{\Q}$ ein $z\in C_4^{\Q}(F_2)$ mit $\partial_4^{\Q}(z)=\partial_4^{\Q}(x)$ und $\|z\|_1\leq K\|\partial_4^{\Q}(x)\|_1$. Offenbar ist $c:=z-x\in\ker\partial_4^{\Q}$ und somit $\|x+c\|_1\leq K\|\partial_4^{\Q}(x)\|_1$, womit insbesondere die gewünschte Eigenschaft erfüllt ist.\par
-Für die Umkehrung sei nun $\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq K\|\partial_4^{\Q}(x)\|_1$ für alle $x\in C_4^{\Q}(F_2)$ erfüllt und sei $a\in\img\partial_4^{\Q}$. Dann existiert ein $x\in C_4^{\Q}(F_2)$ mit $\partial_4^{\Q}(x)=a$.
-Nach Voraussetzung gilt dann $\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq K\|a\|_1$. Insbesondere existiert dann ein $c\in\ker\partial_4^{\Q}$ mit $\|x+c\|_1\leq (K+1)\|a\|_1$. Da $\partial_4^{\Q}(x+c)=a$ gilt, folgt $3$-$\text{UBC}^{\Q}$. 
+Wir zeigen zuerst, dass die gewünschte Eigenschaft aus $q$-$\text{UBC}^{\Q}$ folgt.\par
+Sei $x\in C_{q+1}^{\Q}(G)$. Dann existiert nach $q$-$\text{UBC}^{\Q}$ ein $z\in C_{q+1}^{\Q}(G)$ mit $\partial_{q+1}^{\Q}(z)=\partial_{q+1}^{\Q}(x)$ und $\|z\|_1\leq K\|\partial_{q+1}^{\Q}(x)\|_1$. Offenbar ist $c:=z-x\in\ker\partial_{q+1}^{\Q}$ und somit $\|x+c\|_1\leq K\|\partial_{q+1}^{\Q}(x)\|_1$, womit insbesondere die gewünschte Eigenschaft erfüllt ist.\par
+Für die Umkehrung sei nun $\inf\limits_{c\in\ker\partial_{q+1}^{\Q}}\|x+c\|_1\leq K\|\partial_{q+1}^{\Q}(x)\|_1$ für alle $x\in C_{q+1}^{\Q}(G)$ erfüllt. Ist $a\in\img\partial_{q+1}^{\Q}$, so existiert ein $x\in C_{q+1}^{\Q}(G)$ mit $\partial_{q+1}^{\Q}(x)=a$ und
+nach Voraussetzung gilt $\inf\limits_{c\in\ker\partial_{q+1}^{\Q}}\|x+c\|_1\leq K\|a\|_1$. Insbesondere existiert dann ein $c\in\ker\partial_{q+1}^{\Q}$ mit $\|x+c\|_1\leq (K+1)\|a\|_1$. Da $\partial_{q+1}^{\Q}(x+c)=a$ gilt, folgt $q$-$\text{UBC}^{\Q}$. 
 \end{proof}
 \end{lemma}
+
 \begin{bemerkung}\label{bem:strategy}
 \cref{lem:AltQUBC} ermöglicht folgende Strategie: 
 \begin{itemize}
@@ -709,10 +709,28 @@ Nach Voraussetzung gilt dann $\inf\limits_{c\in\ker\partial_4^{\Q}}\|x+c\|_1\leq
 \item Falls wir Elemente $x\in C_4^{\Q}(F_2)$ mit außergewöhnlich großen Quotienten $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ finden (für welche es keine $c\in \ker\partial_4^{\Q}$ gibt, sodass $\frac{\|x+c\|_1}{\|\partial_4^{\Q}(x)\|_1}<\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ gilt, siehe \cref{lem:AltQUBC}), ein Bildungsgesetz für eine Folge $\bigl(x_i\in C_4^{\Q}(F_2)\bigr)_{i\in\N}$ finden, die die Existenz einer Schranke $K$ aus \cref{lem:AltQUBC} widerlegt \par oder \par eine Gesetzmäßigkeit beobachten, welche zum Beweis der Existenz einer Schranke $K$ aus \cref{lem:AltQUBC} benutzt werden kann.
 \end{itemize}
 \end{bemerkung}
+
+\chapter{Auswertung des Experiments}
+Zum Abschluss dieser Arbeit sollen Daten wie in \cref{bem:strategy} generiert und anschließend ausgewertet werden.\par
+Dazu wird zunächst die dieser Arbeit beiliegende Implementation beschrieben.
+
 \section{Implementation des Experiments}
-Eine beispielhafte Implementation des Experiments in der Programmiersprache C++ befindet sich (zusammen mit dem im nächsten Kapitel ausgewerteten Datensatz) auf der beiliegenden CD sowie auf GitHub unter dem Link \url{https://github.com/cybran01/ubc-free-group}.
+Eine beispielhafte Implementation des Experiments in der Programmiersprache C++ befindet sich (zusammen mit dem ausgewerteten Datensatz) auf der beiliegenden CD sowie auf GitHub unter dem Link \url{https://github.com/cybran01/ubc-free-group}.
 \par
-In diesem Beispiel wurden, um die Anzahl an Kollisionen zu erhöhen, nur $x\in C_4^{\Q}(F_2)$ mit ganzzahligen Koeffizienten generiert. Dieser Schritt ist auch dadurch gerechtfertigt, dass für jedes Element $x=\sum\limits_{i=1}^na_iz_i\in C_4^{\Q}(F_2)$ mit $a_i=\frac{p_i}{q_i}$ (d.h. $x$ ist in $\Q$-Basisdarstellung) $y:=\text{kgV}(q_1,\ldots,q_n)x$ ganzzahlige Koeffizienten besitzt und $\frac{\|y\|_1}{\|\partial_4^{\Q}(y)\|_1}=\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ erfüllt, d.h. für jedes Element $x\in C_4^{\Q}(F_2)$ ein $y\in C_4(F_2)$ existiert, welches denselben Wert für den Quotienten liefert.\par 
+In diesem Beispiel wurden, um die Anzahl an Kollisionen zu erhöhen, nur $x\in C_4^{\Q}(F_2)$ mit ganzzahligen Koeffizienten generiert.
+Dieser Schritt ist auch durch folgende Bemerkung gerechtfertigt:
+\begin{bemerkung}\label{bem:ZUBC}
+Sei $G$ eine Gruppe, $n\in\N$ und $x\in C_n^{\Q}(G)$.
+Dann gibt es ein $y\in C_n(G)$ mit folgenden Eigenschaften:
+\begin{itemize}
+\item $y$ ist von $x$ linear abhängig
+\item für die Basisdarstellung $y=\sum\limits_{i=1}^ma_ix_i$ bezüglich der Basis aus \cref{satz:ZBasisOfBarRes} gilt $\gcd(a_1,\ldots,a_m)=1$.
+\end{itemize} 
+\begin{proof}
+Sei $x=\sum\limits_{i=1}^mb_ix_i$ in der Basisdarstellung der $\Q$-Basis aus \cref{bem:RBasisOfBarRes} mit $b_i=\frac{p_i}{q_i}$ und $p_i,q_i\in\Z$, $\lambda=\lcm(q_1,\ldots,q_n)$ und sei $\mu=\frac{\lambda}{\gcd(\lambda b_1,\ldots,\lambda b_m)}$. Dann erfüllt $y=\mu x$ die gewünschten Eigenschaften.
+\end{proof}
+\end{bemerkung} 
+Insbesondere existiert also für jedes Element $x\in C_4^{\Q}(F_2)$ ein $y\in C_4(F_2)$, welches $\frac{\|y\|_1}{\|\partial_4^{\Q}(y)\|_1}=\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$ erfüllt.\par 
 Um Reproduzierbarbeit zu gewährleisten, wurde der Datensatz mit den im Quelltext angegebenen ,,Default''-Parametern generiert.
 \par
 Die Implementation besteht aus 4 Klassen, die die folgenden Funktionalitäten übernehmen:
@@ -728,21 +746,21 @@ Diese Klasse ist abstrakt und lediglich eine Schnittstelle für beliebige Algori
 \item RandomGenerator\par
 Dies ist eine von BarResElementGenerator abgeleitete Klasse, welche Elemente der Bar-Auflösung ,,zufällig'' generiert. Sie benutzt einen Pseudozufallsgenerator mit Startwert, d.h. für gleichen Startwert und gleiche Eingabeparameter der Methode \lstinline|nextElement(int,int,int,int,int)| wird die gleiche Ausgabe generiert. Die Eingabeparameter sind dabei die folgenden:
 \begin{itemize}
-\item \lstinline|elementMaxlength| gibt die maximale Länge (in der $\Q$-Basis) der generierten Elemente der Bar-Auflösung an
-\item \lstinline|wordMaxlength| gibt die maximale Länge der Elemente aus $F_2$ an, die zur Konstruktion der Basisdarstellung des Elements verwendet werden
+\item \lstinline|elementMaxlength| gibt die maximale Länge (in der $\Q$-Basis) der generierten Elemente der Bar-Auflösung an.
+\item \lstinline|wordMaxlength| gibt die maximale Länge der Elemente aus $F_2$ an, die zur Konstruktion der Basisdarstellung des Elements verwendet werden.
 \item \lstinline|expMax| gibt den maximalen Betrag der Koeffizienten an, den die generierten Elemente $w\in F_2$ besitzen, d.h. für $w=a^{n_1}b^{n_2}a^{n_3}b^{n_4}\ldots$ gilt $max(|n_1|,|n_2|,\\|n_3|,\ldots)\leq \text{\lstinline|expMax|}$.
 \item \lstinline|degree| legt den Grad fest, in dem die Elemente der Bar-Auflösung generiert werden. In unserem Fall ist dieser Parameter $4$.
-\item \lstinline|maxKoeff| legt den maximalen Betrag von Koeffizienten in der $\Q$-Basis\-darstellung von generierten Elementen fest. Für $x=\sum\limits_{i=1}^na_ix_i\in C_{\text{\lstinline|degree|}}^{\Q}(F_2)$ gilt also $max(|a_1|,|a_2|,|a_3|,\ldots)\leq \text{\lstinline|maxKoeff|}$
+\item \lstinline|maxKoeff| legt den maximalen Betrag von Koeffizienten in der $\Q$-Basis\-darstellung von generierten Elementen fest. Für $x=\sum\limits_{i=1}^na_ix_i\in C_{\text{\lstinline|degree|}}^{\Q}(F_2)$ gilt also $max(|a_1|,|a_2|,|a_3|,\ldots)\leq \text{\lstinline|maxKoeff|}$.
 \end{itemize}
 Da diese Klasse ebenfalls eine Schablone ist, können auch hier eigene Datentypen für die Koeffizienten benutzt werden.
 \end{itemize}
 Beim Ausführen des Programms müssen die gewünschte Größe des zu generierenden Datensatzes und die obigen Parameter eingegeben werden. Danach wird wiederholt die Methode \lstinline|nextElement(int,int,int,int,int)| aufgerufen und aus dem Ergebnis ein Tripel wie in \cref{bem:strategy} generiert, bis der Datensatz die gewünschte Größe erreicht hat. Der Datensatz wird als ,,experiment.csv'' im CSV-Format mit Semikolon als Trennungszeichen gespeichert.
-\chapter{Auswertung des Experiments}
-Zum Abschluss dieser Arbeit sollen die generierten Daten ausgewertet werden.\par
+
+\section{Auswertung des Datensatzes}
 Für alle Elemente $x$ des Datensatzes bis auf $5$ Ausnahmen gilt
 $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}\leq 1$. Diese Ausnahmen sind folgende:\par
-\renewcommand{\arraystretch}{2}
 \begin{center}
+\renewcommand{\arraystretch}{2}
 \begin{tabular}{l|l|l}
 $x$ & $\partial_4^{\Q}(x)$ & $\frac{\|x\|_1}{\|\partial_4^{\Q}(x)\|_1}$\\ \hline\hline
 $+4e\cdot[e | e | e | e]-6e\cdot[e | e | e | b^{4}a^{-2}]$ & $-2e\cdot [e | e | e]$ & 5 \\\hline
@@ -751,7 +769,7 @@ $\begin{aligned}
 \end{aligned}$ & $-1a^{-2}\cdot [e| e | e]$ & 5\\\hline
 $-3e\cdot[e | e | e | a^{-3} b^{-2}]+6e\cdot[e | e | e | a^3 b^4]$ & $+3e\cdot [e | e | e]$ & 3\\\hline
 $\begin{aligned}
-&+3e\cdot[e | e | e | a^{-2} b^{-2} a]-3e\cdot[e | e | e | b^3]\\&+6a^{ -3}b\cdot[a^{-2} | e | b^4 a^{-4} b^3 a^{-1} | e]  
+&+3e\cdot[e | e | e | a^{-2} b^{-2} a]-3e\cdot[e | e | e | b^3]\\&+6a^{ -3}b\cdot[a^{-1} | e | b^4 a^{-4} b^3 a^{-1} | e]  
 \end{aligned}$
 &  $+6a^{-3} b a^{-1}\cdot [e | b^4 a^{-4} b^3 a^{-1} | e]$ & 2\\\hline
 $\begin{aligned}
@@ -764,7 +782,9 @@ $\begin{aligned}
 \end{center}
 
 Durch ,,Korrektur'' mit Elementen aus $\ker\partial_4^{\Q}$ wie in \cref{lem:AltQUBC} können jedoch die Quotienten aller Elemente dieser Liste auf $\leq 1$ verringert werden.\par
-Beispielweise gilt für das erste Element $x:=+4e\cdot[e | e | e | e]-6e\cdot[e | e | e | b^{4}a^{-2}]$ der Liste wegen $d:=+1e\cdot[e | e | e | e]-1e\cdot[e | e | e | b^{4}a^{-2}]\in \ker\partial_4^{\Q}$, dass $\partial_4^{\Q}(x-4d)=\partial_4^{\Q}\bigl(-2e\cdot[e | e | e | b^{4}a^{-2}]\bigr)=-2e\cdot [e | e | e]=\partial_4^{\Q}(x)$, also insbesondere $\frac{\|x-4d\|_1}{\|\partial_4^{\Q}(x)\|_1}=1$. Analog kann auch für die anderen Elemente verfahren werden.\par 
+Beispielweise gilt für das erste Element $x=+4e\cdot[e | e | e | e]-6e\cdot[e | e | e | b^{4}a^{-2}]$ der Liste wegen $d=+1e\cdot[e | e | e | e]-1e\cdot[e | e | e | b^{4}a^{-2}]\in \ker\partial_4^{\Q}$, dass $\partial_4^{\Q}(x-4d)=\partial_4^{\Q}\bigl(-2e\cdot[e | e | e | b^{4}a^{-2}]\bigr)=-2e\cdot [e | e | e]=\partial_4^{\Q}(x)$, also insbesondere $\frac{\|x-4d\|_1}{\|\partial_4^{\Q}(x)\|_1}=1$. Analog kann auch für die anderen Elemente verfahren werden.\par 
+Abschließend sollen nun noch beispielhaft einige elementare Abschätzungen für Elemente der Bar-Auflösung gezeigt werden.
+
 \begin{definition}
 Sei $G$ eine Gruppe. Wir definieren für $n\in\N$ die $\Q$-linearen Abbildungen
 \begin{align*}
@@ -781,21 +801,53 @@ Es genügt, die Behauptung auf der $\Q$-Basis von $C_n^{\Q}(G)$ aus \cref{bem:RB
 \end{lemma}
 
 \begin{definition}[Länge von Elementen der Bar-Auflösung]
-Für $n\in\N$ und eine Gruppe $G$ sei
+Für $n\in\N$ und eine Gruppe $G$ definieren wir
 \begin{align*}
 L:C_n^{\Q}(G)&\to \N\\
-x=\sum\limits_{i=1}^na_ix_i&\mapsto n
+x=\sum\limits_{i=1}^ma_ix_i&\mapsto m
 \end{align*}
-wobei $x=\sum\limits_{i=1}^na_ix_i$ in $\Q$-Basisdarstellung der Basis aus \cref{bem:RBasisOfBarRes} sei. Hierbei benutzen wir die Konvention, dass für die leere Summe (d.h. für das $0$-Element) $n=0$ ist.
+wobei $x=\sum\limits_{i=1}^ma_ix_i$ in $\Q$-Basisdarstellung der Basis aus \cref{bem:RBasisOfBarRes} sei. Hierbei benutzen wir die Konvention, dass für die ,,leere Summe'' (d.h. das $0$-Element) $m=0$ ist.
 \end{definition}
 
-\begin{lemma}
-Für die Konstante $K$ aus \cref{lem:AltQUBC} gilt $K\geq 1$.
+\begin{lemma}\label{lem:KBiggerThan1}
+Sei $n\in\N$ gerade, $G$ eine Gruppe und $x\in C_n^{\Q}(G)$ mit $L(x)=1$. Dann gilt 
+\begin{equation*}
+\sup\limits_{\substack{x\in C_n^{\Q}(G)\\L(x)=1}}\inf\limits_{c\in\ker\partial_n^{\Q}}\frac{\|x+c\|_1}{\|\partial_n^{\Q}(x)\|_1}=1.
+\end{equation*}
 \begin{proof}
-Für $x=e\cdot[e|e|e|e]$ gilt $\|x\|_1=\|\partial_4^{\Q}(x)\|_1$. Sei nun $d\in\ker\partial_4^{\Q}$. Dann gilt nach \cref{lem:MapsCommute} $f_4(d)=0$, also $\|x\|_1=|f_4(x)|=|f_4(x+d)|\leq \|x+d\|_1$. Somit folgt $K\geq 1$. 
+Sei $x\in C_n^{\Q}(G)$ mit $L(x)=1$. Dann gilt $x=ag\cdot[g_1|\ldots|g_n]$ mit $a\in \Q\backslash\{0\},g,g_1,\ldots,g_n\in G$ und insbesondere $f_n(x)=a$. Für $c\in\ker\partial_n^{\Q}$ gilt $f_n(c)=0$ nach \cref{lem:MapsCommute}, d.h. $\|x\|_1=|f_n(x)|=|f_n(x+c)|\leq \|x+c\|_1$, also $\inf\limits_{c\in\ker\partial_n^{\Q}}\|x+c\|_1=\|x\|_1$. Weiter gilt $\|x\|_1=|f_n(x)|=|f_{n-1}\circ\partial_n^{\Q}(x)|\leq \|\partial_n^{\Q}(x)\|_1$, d.h.
+\begin{equation*}
+\sup\limits_{\substack{x\in C_n^{\Q}(G)\\L(x)=1}}\inf\limits_{c\in\ker\partial_n^{\Q}}\frac{\|x+c\|_1}{\|\partial_n^{\Q}(x)\|_1}\leq 1.
+\end{equation*} 
+Für $x=e\cdot[e|\ldots|e]$ gilt $1=\|x\|_1=\|\partial_4^{\Q}(x)\|_1$, also 
+\begin{equation*}
+\sup\limits_{\substack{x\in C_n^{\Q}(G)\\L(x)=1}}\inf\limits_{c\in\ker\partial_n^{\Q}}\frac{\|x+c\|_1}{\|\partial_n^{\Q}(x)\|_1}=1.
+\end{equation*} 
 \end{proof}
 \end{lemma}
-%TODO für (f-g) zeigen
+
+\begin{korollar}
+Sei $G$ eine Gruppe. Für ungerade $q\in\N$ gilt für die Konstante $K$ aus \cref{lem:AltQUBC} $K\geq 1$.
+\begin{proof}
+Da $q+1$ gerade ist, folgt dies aus \cref{lem:KBiggerThan1}.
+\end{proof}
+\end{korollar}
+
+\begin{lemma}\label{lem:parityEstimate}
+Sei $n\in\N$ gerade, $G$ eine Gruppe und $x\in C_n^{\Q}(G)$. Sei weiter $\mu\in\Q$ gewählt wie in \cref{bem:ZUBC}, d.h. $y=\mu x$ erfüllt die Eigenschaften aus \cref{bem:ZUBC}. Gilt $\|x\|_1>\|\partial_n^{\Q}(x)\|_1$, so folgt $\mu\|x\|_1-2\geq \mu\|\partial_n^{\Q}(x)\|_1$.
+\begin{proof}
+Offenbar gilt $\|\mu x\|_1\equiv f_n(\mu x)\bmod 2$ sowie $\|\partial_n^{\Q}(\mu x)\|_1\equiv f_{n-1}(\partial_n^{\Q}(\mu x))\bmod 2$ und aus \cref{lem:MapsCommute} folgt somit $\|\partial_n^{\Q}(\mu x)\|_1\equiv \|\mu x\|_1\mod 2$. Wegen $\mu\|x\|_1>\mu\|\partial_n^{\Q}(x)\|_1$ muss somit $\mu\|x\|_1-2\geq\mu\|\partial_n^{\Q}(x)\|_1$ gelten.
+\end{proof}
+\end{lemma}
+
+\begin{korollar}
+Sei $G$ eine Gruppe, $n\in\N$ gerade, $g,g_1,\ldots,g_n,h,h_1,\ldots,h_n\in G$ und $x=g\cdot[g_1|\ldots|g_n]-h\cdot[h_1|\ldots|h_n]\in C_n^{\Q}(G)$ mit $x\neq 0$. Gilt $\|x\|_1>\|\partial_n^{\Q}(x)\|_1$, so folgt bereits $x\in\ker\partial_n^{\Q}$.
+\begin{proof}
+Aus \cref{lem:parityEstimate} folgt (da hier $\mu = 1$), dass $\|x\|_1-2\geq\|\partial_n^{\Q}(x)\|_1$ gilt. Wegen $\|x\|_1=2$ gilt also $x\in\ker\partial_n^{\Q}$.
+\end{proof}
+\end{korollar}
+
+
 \nocite{loeha}
 \nocite{loehb}
 \nocite{frigerio}
